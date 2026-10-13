@@ -130,7 +130,7 @@
         Termo para Acesso e Reprodução de Acervo
       </h2>
       <p class="text-xs sm:text-sm text-gray-700 mt-2 leading-relaxed text-justify">
-        Este é o formulário oficial para solicitar acesso ao acervo e/ou reproduções do Museu Histórico "Prof. Carlos da Silva Lacaz" da FMUSP. Após o envio, você receberá um número de protocolo e o PDF com a sua solicitação. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis, conforme o item 2 do Termo. A avaliação e a decisão final sobre o acesso e as reproduções são de responsabilidade exclusiva do Museu, orientadas por critérios técnicos, jurídicos e de conservação e pelas políticas de salvaguarda (proteção) do Museu (itens 2 e 3 do Termo).
+        Este é o formulário oficial para solicitar acesso ao acervo e/ou reproduções do Museu Histórico "Prof. Carlos da Silva Lacaz" da FMUSP. Após o envio, você receberá um número de protocolo e o PDF com a sua solicitação. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis. A avaliação e a decisão final sobre o acesso e as reproduções são de responsabilidade exclusiva do Museu, orientadas por critérios técnicos, jurídicos e de conservação e pelas políticas de salvaguarda (proteção) do Museu.
       </p>
 
       <!-- CAIXA INFORMATIVA DE ACESSIBILIDADE -->
@@ -139,7 +139,7 @@
           <i class="fa-solid fa-universal-access text-[#009CA6]"></i> Precisa de ajuda para preencher o formulário?
         </p>
         <p>
-          Se você tem deficiência ou limitação tecnológica que dificulte o preenchimento, você tem direito a atendimento assistido. Use os canais de suporte indicados na plataforma, conforme a Lei nº 13.146/2015 (Estatuto da Pessoa com Deficiência).
+          Se você tem deficiência ou limitação tecnológica que dificulte o preenchimento, você tem direito a atendimento assistido. Use os canais de suporte indicados no rodapé dessa página.
         </p>
       </div>
 
@@ -166,14 +166,14 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">1</span>
-            Cadastro do Pesquisador / Solicitante (Etapa ①)
+            Cadastro do Pesquisador / Solicitante
           </h3>
         </div>
 
         <!-- Reaproveitamento de cadastro prévio (CPF + código por e-mail) -->
         <div id="boxRetorno" class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2.5">
-          <p class="text-sm font-bold text-[#006747]"><i class="fa-solid fa-user-check mr-1"></i> Já fez uma solicitação ao CPDoc antes?</p>
-          <p class="text-xs text-gray-700">Informe o seu CPF. Enviaremos um código para o e-mail do seu cadastro e você não precisará anexar o documento de identificação novamente.</p>
+          <p class="text-sm font-bold text-[#006747]"><i class="fa-solid fa-user-check mr-1"></i> Já possui cadastro de solicitante?</p>
+          <p class="text-xs text-gray-700">Informe o seu CPF. Enviaremos um código para o e-mail do seu cadastro e você poderá continuar com nova solicitação.</p>
           <div class="flex flex-col sm:flex-row gap-2">
             <input type="text" id="cpfRetorno" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" class="flex-1 p-2.5 border rounded-xl text-sm focus-fmusp" oninput="maskCpfRetorno(this)">
             <button type="button" id="btnEnviarCodigo" onclick="solicitarCodigo()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-[#006747] text-white hover:opacity-90">Enviar código</button>
@@ -190,7 +190,7 @@
 
         <div id="boxIdentificado" class="hidden p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-sm text-emerald-900">
           <p class="font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Identidade confirmada por código enviado ao seu e-mail.</p>
-          <p class="text-xs mt-1">Seus dados foram preenchidos a partir do cadastro anterior e o envio de documentos de identificação foi dispensado. Você pode atualizar o telefone, se necessário.</p>
+          <p class="text-xs mt-1">Seus dados foram preenchidos a partir do cadastro anterior e o envio de documento de identificação foi dispensado. Você pode atualizar informações, se necessário.</p>
           <button type="button" onclick="desfazerIdentificacao(true)" class="mt-2 text-xs underline font-semibold">Não sou eu / preencher manualmente</button>
         </div>
 
@@ -241,17 +241,17 @@
 
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Telefone / WhatsApp *</label>
-            <input type="text" id="telefoneSolicitante" name="tel" autocomplete="tel" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="(11) 90000-0000" maxlength="15" oninput="maskTelefone(this)" required>
+            <input type="text" id="telefoneSolicitante" name="tel" autocomplete="tel" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="+55 (11) 90000-0000" maxlength="15" oninput="maskTelefone(this)" required>
           </div>
         </div>
 
         <div id="boxUploadsIdent" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
-              Documento de Identificação (RG, CIN, CNH ou Passaporte com foto) *
+              Documento de Identificação com foto (RG, CIN, CNH ou Passaporte) *
             </label>
             <input type="file" id="uploadDocIdentidade" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#006747] file:text-white hover:file:opacity-90 cursor-pointer" required>
-            <p class="text-[10px] text-gray-500 mt-1">Formatos aceitos: PDF, JPG, PNG. Fotos são reduzidas automaticamente; o total de anexos deve ficar em até 3 MB.</p>
+            <p class="text-[10px] text-gray-500 mt-1">Formatos aceitos: PDF, JPG e PNG (até 3 MB).</p>
           </div>
 
           <div id="boxComprovanteVinculo">
@@ -269,7 +269,7 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">2</span>
-            Finalidade da Consulta e do Uso Pretendido (Etapa ②)
+            Finalidade da Consulta e do Uso Pretendido
           </h3>
         </div>
 
@@ -329,7 +329,7 @@
               <option value="Não">Não (em tramitação ou pendente)</option>
             </select>
             <p class="text-[11px] text-amber-900 mt-1.5 leading-relaxed">
-              Obrigatório quando a pesquisa envolver dados de pacientes, prontuários ou material biológico humano identificável. Aciona avaliação curatorial prévia e, quando cabível, a exigência de aprovação prévia de Comitê de Ética em Pesquisa ou parecer técnico da curadoria (itens 2 e 3 do Termo).
+              Obrigatório quando a pesquisa envolver dados de pacientes, prontuários ou material biológico humano identificável. Aciona avaliação curatorial prévia e, quando cabível, a exigência de aprovação prévia de Comitê de Ética em Pesquisa ou parecer da curadoria científica.
             </p>
           </div>
 
@@ -338,7 +338,7 @@
               Upload do Parecer Consubstanciado do CEP/CONEP *
             </label>
             <input type="file" id="uploadParecerCEP" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-800 file:text-white cursor-pointer">
-            <p class="text-[10px] text-amber-800 mt-1">Formatos aceitos: PDF, JPG, PNG. Fotos são reduzidas automaticamente; o total de anexos deve ficar em até 3 MB.</p>
+            <p class="text-[10px] text-amber-800 mt-1">Formatos aceitos: PDF, JPG e PNG (até 3 MB).</p>
           </div>
         </div>
       </div>
@@ -348,7 +348,7 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">3</span>
-            Itens do Acervo Solicitados e Modalidade de Atendimento (Etapa ③)
+            Itens do Acervo Solicitados e Modalidade de Atendimento
           </h3>
         </div>
 
@@ -366,7 +366,7 @@
           <div class="md:col-span-2">
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Código(s) de Referência do(s) Item(ns) *</label>
             <input type="text" id="codigosReferencia" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Ex: Fundo Lacaz / Cx. 12; Peça Anatômica 045; Doc. FMUSP-1932-04" required>
-            <p class="text-[10px] text-gray-500 mt-1">Conforme catálogo, inventário ou guia do acervo online do Museu.</p>
+            <p class="text-[10px] text-gray-500 mt-1">Conforme guia do acervo online ou outra catalogação do Museu.</p>
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade Estimada de Itens *</label>
@@ -379,7 +379,7 @@
             <i class="fa-solid fa-circle-info text-[#009CA6]"></i> Limite Inicial de 15 Itens por Solicitação
           </p>
           <p class="mt-1">
-            Para garantir a integridade física e o controle curatorial, o limite recomendado por chamada é de até 15 itens. Para acervos ou conjuntos maiores, a equipe técnica poderá fracionar a consulta ou orientar o envio de solicitação complementar após a primeira triagem.
+            Para garantir a integridade física e o controle, o limite recomendado por acesso é de até 15 itens. Para acervos ou conjuntos maiores, a equipe técnica poderá fracionar a consulta ou orientar o envio de solicitação complementar após a primeira triagem.
           </p>
         </div>
 
@@ -394,13 +394,13 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">4</span>
-            Consulta Presencial (In Loco): Dados de Agendamento (Etapa ④)
+            Consulta Presencial (In Loco): Dados de Agendamento
           </h3>
         </div>
 
         <div class="p-3 bg-[#f0f8f6] border border-[#009CA6]/40 rounded-xl text-xs text-gray-800">
           <i class="fa-solid fa-calendar-check text-[#009CA6] mr-1"></i>
-          <strong>Sua solicitação inclui consulta presencial.</strong> Indique suas opções de data e detalhes operacionais para que a equipe técnica verifique a disponibilidade de espaço e equipe técnica.
+          <strong>Sua solicitação inclui consulta presencial.</strong> Indique suas opções de data e detalhes operacionais para que a equipe técnica verifique a agenda e a disponibilidade de espaço.
         </div>
 
         <div>
@@ -419,7 +419,7 @@
               <input type="date" id="dataVisita3" class="w-full p-2 border rounded-xl text-xs focus-fmusp bg-white">
             </div>
           </div>
-          <p class="text-[10px] text-gray-500 mt-1">Sujeitas à confirmação de disponibilidade da agenda técnica do Museu (item 4 do Termo).</p>
+          <p class="text-[10px] text-gray-500 mt-1">Sujeitas à confirmação de disponibilidade da agenda.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -427,7 +427,7 @@
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Turno Preferencial *</label>
             <select id="turnoVisita" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
               <option value="Manhã">Manhã (09h00 às 12h00)</option>
-              <option value="Tarde">Tarde (14h00 às 17h00)</option>
+              <option value="Tarde">Tarde (13h30 às 16h30)</option>
             </select>
           </div>
 
@@ -447,7 +447,7 @@
             Acompanhante(s) na Consulta Presencial (se houver)
           </label>
           <p class="text-[11px] text-gray-500 -mt-1">
-            Acompanhantes só podem ingressar no espaço de guarda se previamente informados e autorizados pela equipe técnica (item 4.2.7 do Termo).
+            Acompanhantes só podem ingressar no espaço de pesquisa se previamente informados e autorizados pela equipe técnica.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
@@ -470,7 +470,7 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">5</span>
-            Atendimento Remoto: Reprodução e Forma de Entrega (Etapa ⑤)
+            Atendimento Remoto: Reprodução e Forma de Entrega
           </h3>
         </div>
 
@@ -506,14 +506,14 @@
             <option value="E-mail institucional (arquivos de até 10 MB)">E-mail institucional (arquivos de até 10 MB)</option>
             <option value="Retirada presencial de mídia física (pendrive/CD, mediante agendamento prévio)">Retirada presencial de mídia física (pendrive/CD, mediante agendamento prévio)</option>
           </select>
-          <p class="text-[10px] text-gray-500 mt-1">Não é oferecido envio postal de cópias físicas, salvo exceção justificada e aprovada pela curadoria (item 5 do Termo).</p>
+          <p class="text-[10px] text-gray-500 mt-1">Não é oferecido envio postal de cópias físicas, salvo exceção justificada e aprovada.</p>
         </div>
 
         <div class="p-3.5 bg-gray-50 border border-gray-300 rounded-xl">
           <label class="flex items-start gap-2.5 cursor-pointer">
             <input type="checkbox" id="checkCienciaCusto" class="mt-1 rounded text-[#006747]" required>
             <span class="text-xs text-gray-800 font-semibold leading-relaxed">
-              Declaro ciência de que o prazo de atendimento e o eventual custo de reprodução (estritamente limitado ao ressarcimento do custo real do serviço, conforme o item 5 do Termo) serão informados após a triagem técnica do pedido.
+              Declaro ciência de que o prazo de atendimento e o eventual custo de reprodução (estritamente limitado ao ressarcimento do custo real do serviço) serão informados após a triagem técnica do pedido.
             </span>
           </label>
         </div>
@@ -524,7 +524,7 @@
         <div class="border-b border-gray-200 pb-2.5 -mt-1">
           <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
             <span id="stepFinalBadge" class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">4</span>
-            Modalidade de Uso, Crédito Institucional e Assinatura Digital (Etapa ⑥)
+            Modalidade de Uso, Crédito Institucional e Assinatura Digital
           </h3>
         </div>
 
@@ -565,7 +565,7 @@
           </div>
 
           <div id="boxAlertaComercial" class="hidden p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900">
-            <strong>Aviso Legal (Item 9 do Termo):</strong> A seleção de uso comercial não substitui a autorização específica, prévia e expressa do Museu, formalizada obrigatoriamente em instrumento apartado, definindo condições e limites próprios de exploração econômica.
+            <strong>Aviso Legal:</strong> A seleção de uso comercial não substitui a autorização específica, prévia e expressa do Museu, formalizada obrigatoriamente em instrumento apartado, definindo condições e limites próprios de exploração econômica.
           </div>
         </div>
 
@@ -573,24 +573,24 @@
         <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
           <div class="flex justify-between items-center">
             <label class="block text-xs font-bold text-[#006747] uppercase">
-              <i class="fa-solid fa-quote-left text-[#009CA6] mr-1"></i> Forma de Citação / Crédito Institucional Obrigatório (Anexo I)
+              <i class="fa-solid fa-quote-left text-[#009CA6] mr-1"></i> Forma de Citação / Crédito Institucional Obrigatório
             </label>
             <button type="button" onclick="copiarCredito()" class="text-[11px] font-semibold text-[#009CA6] hover:text-[#006747] flex items-center gap-1">
               <i class="fa-solid fa-copy"></i> Copiar padrão
             </button>
           </div>
           <div id="textoCreditoPadrao" class="p-3 bg-white border border-gray-300 rounded-lg text-xs font-mono text-gray-800 select-all leading-relaxed">
-            Acervo do Museu Histórico "Prof. Carlos da Silva Lacaz" da Faculdade de Medicina da Universidade de São Paulo — MHFM-USP. Nº de tombamento/inventário: [código do item]. [Autoria, quando identificada]. [Título ou descrição do item], [datação].
+            Acervo do Museu Histórico da Faculdade de Medicina da Universidade de São Paulo — MHFMUSP. Nº de tombamento/código de referência: [código do item]. [Autoria, quando identificada]. [Título ou descrição do item], [datação].
           </div>
           <p class="text-[11px] text-gray-600">
-            Conforme a norma ABNT NBR 6023/2018 e o item 8 do Termo. A omissão do crédito ou apresentação inexata sujeita o solicitante às sanções do item 12.
+            Conforme a norma de citação ABNT NBR 6023/2018 ou outra norma. A omissão do crédito sujeita o solicitante à sanções.
           </p>
 
           <div class="pt-2">
             <label class="flex items-start gap-2.5 cursor-pointer">
               <input type="checkbox" id="checkDireitosTerceiros" class="mt-1 rounded text-[#006747]" required>
               <span class="text-xs text-gray-800 font-semibold leading-relaxed">
-                Declaro ciência de que a autorização não transfere direitos autorais de terceiros e que verificarei a existência de direitos incidentes sobre a obra ou bem, quando aplicável (item 7 do Termo e Lei nº 9.610/1998).
+                Declaro ciência de que a autorização não transfere direitos autorais de terceiros e que verificarei a existência de direitos incidentes sobre a obra ou bem, quando aplicável (Lei nº 9.610/1998).
               </span>
             </label>
           </div>
@@ -698,42 +698,42 @@
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Declaro que as informações que prestei neste formulário são verdadeiras e que a finalidade de uso declarada corresponde ao real propósito da minha consulta e/ou reprodução (item 1 do Termo).</span>
+            <span>Declaro que as informações que prestei neste formulário são verdadeiras e que a finalidade de uso declarada corresponde ao real propósito da minha consulta e/ou reprodução.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Vou utilizar o(s) item(ns) e/ou a(s) reprodução(ões) exclusivamente para as finalidades que declarei, sem uso comercial não autorizado e sem técnicas de reprodução não autorizadas (itens 6, 9 e 12 do Termo).</span>
+            <span>Vou utilizar o(s) item(ns) e/ou a(s) reprodução(ões) exclusivamente para as finalidades que declarei, sem uso comercial não autorizado e sem técnicas de reprodução não autorizadas.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Vou incluir, em toda publicação, exibição ou divulgação do material, o crédito institucional ao Museu na forma indicada no Anexo I (item 8 do Termo).</span>
+            <span>Vou incluir, em toda publicação, exibição ou divulgação do material, o crédito institucional ao Museu na forma indicada.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Sei que a reprodução autorizada não transfere direitos autorais de terceiros — autores, fotógrafos, ilustradores, herdeiros — e que obter as autorizações adicionais, quando necessárias, é responsabilidade minha (item 7 do Termo e Lei nº 9.610/1998).</span>
+            <span>Sei que a reprodução autorizada não transfere direitos autorais de terceiros — autores, fotógrafos, ilustradores, herdeiros — e que obter as autorizações adicionais, quando necessárias, é responsabilidade minha (Lei nº 9.610/1998).</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Na consulta presencial, vou comparecer na data e no horário confirmados pelo Museu e seguir as normas de manuseio e de conservação da equipe técnica; no atendimento remoto, sei que o prazo de atendimento e a forma de entrega serão os informados na aprovação (itens 4 e 5 do Termo).</span>
+            <span>Na consulta presencial, vou comparecer na data e no horário confirmados pelo Museu e seguir as normas de manuseio e de conservação da equipe técnica; no atendimento remoto, sei que o prazo de atendimento e a forma de entrega serão os informados na aprovação.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Autorizo o tratamento dos meus dados pessoais pelo Museu, conforme a Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades de controle de acesso ao acervo, gestão das solicitações e do protocolo, e eventual defesa em processo administrativo (item 10 do Termo).</span>
+            <span>Autorizo o tratamento dos meus dados pessoais pelo Museu, conforme a Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades de controle de acesso ao acervo, gestão das solicitações e do protocolo, e eventual defesa em processo administrativo.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Quando aplicável, vou enviar ao Museu, sem custo e pelo próprio sistema, um exemplar digital do trabalho, produto ou publicação resultante do uso autorizado, no prazo definido na aprovação ou, na falta dele, de até 60 (sessenta) dias úteis após a publicação, defesa, exibição ou divulgação (item 11 do Termo).</span>
+            <span>Quando aplicável, vou enviar ao Museu, sem custo, um exemplar digital do trabalho, produto ou publicação resultante do uso autorizado, no prazo definido na aprovação ou, na falta dele, de até 60 (sessenta) dias úteis após a publicação, defesa, exibição ou divulgação.</span>
           </label>
 
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
-            <span>Li e concordo integralmente com todo o conteúdo do Termo para Acesso e Reprodução de Acervo apresentado neste instrumento — aceite eletrônico com validade jurídica (item 13 do Termo).</span>
+            <span>Li e concordo integralmente com todo o conteúdo do Termo para Acesso e Reprodução de Acervo apresentado neste formulário — aceite eletrônico com validade jurídica.</span>
           </label>
         </div>
       </div>
@@ -771,7 +771,7 @@
         </h3>
         <p class="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto mt-2 leading-relaxed text-justify">
           A sua solicitação foi transmitida ao Centro de Pesquisa e Documentação (CPDoc) do Museu Histórico da FMUSP: <span class="font-bold text-[#006747]">cpdoc.museufm@usp.br</span>.<br class="hidden sm:inline">
-          A solicitação e os arquivos anexados foram encaminhados à equipe técnica para triagem curatorial. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis, prorrogáveis mediante comunicação justificada (item 2 do Termo).
+          A solicitação e os arquivos anexados foram encaminhados à equipe técnica para triagem. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis, prorrogáveis mediante comunicação justificada.
         </p>
       </div>
 
@@ -786,10 +786,10 @@
         </div>
         <div class="flex justify-between border-b pb-1.5">
           <span class="text-gray-500">Situação Inicial:</span>
-          <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Recebida — aguardando triagem curatorial</span>
+          <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Recebida — aguardando triagem</span>
         </div>
         <div class="border-b pb-1.5">
-          <span class="text-gray-500 block mb-0.5">Hash SHA-256 do Termo Aceito (Versão do Instrumento):</span>
+          <span class="text-gray-500 block mb-0.5">Hash SHA-256 do Termo Aceito (Versão do Formulário):</span>
           <span id="displayHashTermo" class="font-mono text-[10px] break-all bg-white p-2 rounded border block text-gray-700"></span>
         </div>
         <div class="border-b pb-1.5">
@@ -802,8 +802,8 @@
       </div>
 
       <div class="max-w-lg mx-auto p-3.5 bg-blue-50/70 border border-[#009CA6]/40 rounded-xl text-xs text-gray-700 text-justify">
-        <p class="font-bold text-[#006747] mb-1"><i class="fa-solid fa-gavel mr-1"></i> Direito de Recurso (Item 2.4 do Termo):</p>
-        Se o pedido for indeferido, restringido ou condicionado, cabe recurso à coordenação do Museu, pelo próprio sistema ou pelo e-mail institucional <span class="font-mono font-semibold">cpdoc.museufm@usp.br</span>, no prazo de até 10 (dez) dias úteis a contar da ciência da decisão.
+        <p class="font-bold text-[#006747] mb-1"><i class="fa-solid fa-gavel mr-1"></i> Direito de Recurso:</p>
+        Se o pedido for indeferido, restringido ou condicionado, cabe recurso pelo e-mail institucional <span class="font-mono font-semibold">cpdoc.museufm@usp.br</span>, no prazo de até 10 (dez) dias úteis a contar da ciência da decisão.
       </div>
 
       <div class="flex flex-wrap gap-3 justify-center pt-2">
