@@ -1,5 +1,10 @@
+Aqui está o código completo e resiliente para o ficheiro api/send-email.js.
+
+Este código aceita diferentes convenções de nomenclatura de variáveis (camelCase, snake_case ou campos aninhados), trata conversões em formato JSON e regista nos registos da Vercel as chaves exatas recebidas caso algum dado essencial falte.
+
+JavaScript
 export default async function handler(req, res) {
-  // 1. Configuração de cabeçalhos CORS para permitir requisições do front-end
+  // 1. Cabeçalhos CORS para permitir requisições seguras do front-end
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -16,50 +21,92 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido. Utilize POST.' });
   }
 
-  const {
-    nome,
-    cpf,
-    email,
-    telefone,
-    instituicao,
-    vinculo,
-    finalidade,
-    descricaoProjeto,
-    itensSolicitados,
-    protocolo,
-    codigoAcompanhamento,
-    hashDossie,
-    validacaoOtpTimestamp,
-    pdfBase64
-  } = req.body || {};
-
-  // Validação básica dos campos fundamentais
-  if (!nome || !email || !cpf) {
-    return res.status(400).json({ error: 'Dados obrigatórios em falta (nome, e-mail ou CPF).' });
-  }
-
-  const brevoApiKey = process.env.BREVO_API_KEY;
-  if (!brevoApiKey) {
-    console.error('Variável de ambiente BREVO_API_KEY não configurada na Vercel.');
-    return res.status(500).json({ error: 'Configuração do serviço de e-mail em falta no servidor.' });
-  }
-
   try {
-    const idProtocolo = protocolo || codigoAcompanhamento || `REQ-${Date.now()}`;
-    const dataEnvioFormatada = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    // Normalização do corpo da requisição (trata texto bruto ou JSON)
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        // Mantém como objeto caso já esteja tratado
+      }
+    }
 
-    // Preparação dos anexos (adiciona o PDF do termo se fornecido em base64)
-    const attachments = [];
-    if (pdfBase64) {
-      // Remove o prefixo "data:application/pdf;base64," se estiver presente
-      const conteudoLimpo = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
-      attachments.push({
-        name: `Termo_Acesso_CPDoc_${idProtocolo}.pdf`,
-        content: conteudoLimpo
+    // Suporta dados enviados diretamente ou encapsulados em "dados", "formData" ou "form"
+    const data = body?.dados || body?.formData || body?.form || body || {};
+
+    // Mapeamento automático de sinónimos frequentes de nomes de campo
+    const nome = (
+      data.nome ||
+      data.nomeCompleto ||
+      data.nome_completo ||
+      data.solicitante_nome ||
+      data.nome_solicitante ||
+      data['nome-completo'] ||
+      ''
+    ).trim();
+
+    const cpf = (
+      data.cpf ||
+      data.cpfSolicitante ||
+      data.cpf_solicitante ||
+      data.solicitante_cpf ||
+      data.documento_cpf ||
+      data['cpf'] ||
+      ''
+    ).trim();
+
+    const email = (
+      data.email ||
+      data.emailContato ||
+      data.email_contato ||
+      data.solicitante_email ||
+      data.email_solicitante ||
+      data['email'] ||
+      ''
+    ).trim();
+
+    const telefone = data.telefone || data.tel || data.telefone_contato || data.celular || '';
+    const instituicao = data.instituicao || data.instituicao_vinculo || data.universidade || '';
+    const vinculo = data.vinculo || data.tipo_vinculo || data.cargo || '';
+    const finalidade = data.finalidade || data.tipo_finalidade || data.tipoPesquisa || '';
+    const descricaoProjeto = data.descricaoProjeto || data.descricao_projeto || data.justificativa || data.projeto || '';
+    const itensSolicitados = data.itensSolicitados || data.itens_solicitados || data.lista_itens || data.itens || '';
+    const protocolo = data.protocolo || data.codigoAcompanhamento || data.codigo_acompanhamento || `REQ-${Date.now()}`;
+    const hashDossie = data.hashDossie || data.hash_dossie || data.sha256 || '';
+    const validacaoOtpTimestamp = data.validacaoOtpTimestamp || data.validacao_otp_timestamp || '';
+    const pdfBase64 = data.pdfBase64 || data.pdf_base64 || data.pdf || data.arquivo_pdf || '';
+
+    // Validação de campos essenciais com diagnóstico detalhado
+    if (!nome || !email || !cpf) {
+      console.error('Campos obrigatórios em falta. Chaves detetadas no payload:', Object.keys(data));
+      return res.status(400).json({
+        error: 'Dados obrigatórios em falta (nome, e-mail ou CPF).',
+        chavesRecebidas: Object.keys(data)
       });
     }
 
-    // Corpo em HTML formatado para a equipa técnica do CPDoc e cópia do investigador
+    const brevoApiKey = process.env.BREVO_API_KEY;
+    if (!brevoApiKey) {
+      console.error('Variável de ambiente BREVO_API_KEY não configurada na Vercel.');
+      return res.status(500).json({ error: 'Configuração do serviço de e-mail pendente no servidor.' });
+    }
+
+    const dataEnvioFormatada = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+    // Preparação do anexo PDF em Base64
+    const attachments = [];
+    if (pdfBase64) {
+      const base64Limpo = String(pdfBase64).replace(/^data:application\/pdf;base64,/, '').trim();
+      if (base64Limpo.length > 0) {
+        attachments.push({
+          name: `Termo_Acesso_CPDoc_${protocolo}.pdf`,
+          content: base64Limpo
+        });
+      }
+    }
+
+    // Estruturação do e-mail em HTML
     const htmlEmail = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; max-width: 680px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="border-bottom: 2px solid #0b3b60; padding-bottom: 12px; margin-bottom: 20px;">
@@ -70,7 +117,7 @@ export default async function handler(req, res) {
         <p>Foi submetida uma nova solicitação formal de consulta/reprodução com o seguinte protocolo:</p>
         
         <div style="background-color: #f3f4f6; padding: 12px 16px; border-left: 4px solid #0b3b60; margin-bottom: 20px;">
-          <strong>Protocolo / Identificador:</strong> ${idProtocolo}<br>
+          <strong>Protocolo / Identificador:</strong> ${protocolo}<br>
           <strong>Data de Envio:</strong> ${dataEnvioFormatada}<br>
           ${validacaoOtpTimestamp ? `<strong>Autenticação 2FA (OTP):</strong> Validada em ${validacaoOtpTimestamp}<br>` : ''}
           ${hashDossie ? `<strong>Assinatura Digital (SHA-256):</strong> <code style="font-size: 11px; word-break: break-all;">${hashDossie}</code>` : ''}
@@ -90,12 +137,12 @@ export default async function handler(req, res) {
         <p><strong>Tipo de Solicitação:</strong> ${finalidade || 'Não informada'}</p>
         <p><strong>Descrição do Projeto / Justificativa:</strong></p>
         <div style="background-color: #f9fafb; padding: 10px; border: 1px solid #e5e7eb; border-radius: 4px; font-style: italic;">
-          ${descricaoProjeto ? descricaoProjeto.replace(/\n/g, '<br>') : 'Não detalhado'}
+          ${descricaoProjeto ? String(descricaoProjeto).replace(/\n/g, '<br>') : 'Não detalhado'}
         </div>
 
         <h3 style="color: #0b3b60; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px;">3. Itens do Acervo Pretendidos</h3>
         <div style="background-color: #f9fafb; padding: 10px; border: 1px solid #e5e7eb; border-radius: 4px;">
-          ${itensSolicitados ? itensSolicitados.replace(/\n/g, '<br>') : 'Consultar PDF em anexo.'}
+          ${itensSolicitados ? String(itensSolicitados).replace(/\n/g, '<br>') : 'Consultar PDF em anexo.'}
         </div>
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
@@ -105,7 +152,7 @@ export default async function handler(req, res) {
       </div>
     `;
 
-    // Disparo através da API v3 do Brevo
+    // Disparo através da API do Brevo
     const respostaBrevo = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -134,7 +181,7 @@ export default async function handler(req, res) {
           email: email,
           name: nome
         },
-        subject: `[CPDoc MHFMUSP] Solicitação de Acesso ao Acervo - ${idProtocolo} - ${nome}`,
+        subject: `[CPDoc MHFMUSP] Solicitação de Acesso ao Acervo - ${protocolo} - ${nome}`,
         htmlContent: htmlEmail,
         attachment: attachments.length > 0 ? attachments : undefined
       })
@@ -153,7 +200,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       sucesso: true,
-      protocolo: idProtocolo,
+      protocolo: protocolo,
       messageId: resultadoBrevo.messageId
     });
 
