@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termo para Acesso e Reprodução de Acervo — CPDoc | MHFMUSP</title>
+
+  <!-- Favicon / Ícone da Aba com quebra de cache -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/Logo_avatar_CPDoc_II.png?v=2">
+  <link rel="shortcut icon" type="image/png" href="/Logo_avatar_CPDoc_II.png?v=2">
+  <link rel="apple-touch-icon" href="/Logo_avatar_CPDoc_II.png?v=2">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- jsPDF & QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Google Fonts: Cinzel, Inter & Merriweather -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fmusp: {
+              pantone342: '#006747',
+              pantone320: '#009CA6',
+              pantone3265: '#00C7B1',
+              black: '#000000',
+              white: '#FFFFFF',
+              dark: '#081712',
+              light: '#f0f8f6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+            heading: ['Cinzel', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .legal-scroll::-webkit-scrollbar { width: 6px; }
+    .legal-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .legal-scroll::-webkit-scrollbar-thumb { background: #009CA6; border-radius: 4px; }
+    .legal-scroll::-webkit-scrollbar-thumb:hover { background: #006747; }
+    .focus-fmusp:focus {
+      outline: none;
+      border-color: #009CA6;
+      box-shadow: 0 0 0 2px rgba(0, 156, 166, 0.25);
+    }
+
+    /* Padronagem líquida procedural FMUSP (Pantone 342 C, 320 C e 3265 C) */
+    .fmusp-water-bg {
+      background: 
+        radial-gradient(circle at 75% 25%, rgba(0, 199, 177, 0.45) 0%, transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(0, 156, 166, 0.50) 0%, transparent 50%),
+        radial-gradient(circle at 45% 45%, rgba(0, 103, 71, 0.85) 0%, rgba(2, 43, 30, 0.98) 100%),
+        #006747;
+    }
+    .fmusp-water-caustic {
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: overlay;
+      opacity: 0.65;
+      filter: url('#water-caustic-filter');
+      pointer-events: none;
+    }
+    .fmusp-water-ripples {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 40%, rgba(0, 199, 177, 0.3) 0%, transparent 60%);
+      mix-blend-mode: color-dodge;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col font-sans antialiased selection:bg-[#009CA6] selection:text-white">
+
+  <!-- FILTRO VETORIAL DE REFRAÇÃO E ONDULAÇÕES LÍQUIDAS -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="water-caustic-filter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035" numOctaves="4" result="noise" />
+      <feDiffuseLighting in="noise" lighting-color="#00C7B1" surfaceScale="2.8" diffuseConstant="1.2" result="light">
+        <feDistantLight azimuth="55" elevation="45" />
+      </feDiffuseLighting>
+      <feBlend mode="multiply" in="SourceGraphic" in2="light" />
+    </filter>
+  </svg>
+
+  <!-- CABEÇALHO INSTITUCIONAL -->
+  <header class="relative fmusp-water-bg text-white sticky top-0 z-40 shadow-lg border-b-2 border-[#00C7B1]/40 overflow-hidden">
+    <div class="fmusp-water-caustic"></div>
+    <div class="fmusp-water-ripples"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-3.5 flex items-center gap-4 sm:gap-5">
+      <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-md bg-transparent flex-shrink-0 flex items-center justify-center">
+        <img src="Logo_avatar_CPDoc.png" alt="Logo CPDoc MHFMUSP" class="w-full h-full object-cover scale-[1.035] translate-y-[0.5px] sm:translate-y-[1px] transform">
+      </div>
+      <div class="space-y-1">
+        <p class="text-sm sm:text-base text-white font-medium leading-tight drop-shadow-md">
+          Faculdade de Medicina da Universidade de São Paulo
+        </p>
+        <h1 class="text-base sm:text-xl font-heading font-bold tracking-wide text-white leading-tight drop-shadow-md">
+          Museu Histórico "Prof. Carlos da Silva Lacaz"
+        </h1>
+        <p class="text-xs sm:text-sm text-white font-semibold leading-tight drop-shadow-md">
+          Centro de Pesquisa e Documentação - CPDoc | Acesso e Reprodução de Acervo
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-4 sm:px-6 sm:py-6">
+
+    <!-- BLOCO TEXTUAL INFORMATIVO -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sm:p-6 mb-4 sm:mb-6">
+      <h2 class="text-xl sm:text-2xl font-heading font-bold text-[#006747] tracking-tight text-center">
+        Termo para Acesso e Reprodução de Acervo
+      </h2>
+      <p class="text-xs sm:text-sm text-gray-700 mt-2 leading-relaxed text-justify">
+        Este é o formulário oficial para solicitar acesso ao acervo e/ou reproduções do Museu Histórico "Prof. Carlos da Silva Lacaz" da FMUSP. Após o envio, você receberá um número de protocolo e o PDF com a sua solicitação. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis, conforme o item 2 do Termo. A avaliação e a decisão final sobre o acesso e as reproduções são de responsabilidade exclusiva do Museu, orientadas por critérios técnicos, jurídicos e de conservação e pelas políticas de salvaguarda (proteção) do Museu (itens 2 e 3 do Termo).
+      </p>
+
+      <!-- CAIXA INFORMATIVA DE ACESSIBILIDADE -->
+      <div class="mt-3.5 p-3.5 bg-[#f0f8f6] border border-[#009CA6]/40 rounded-xl text-xs text-gray-800 leading-relaxed shadow-sm">
+        <p class="font-bold text-[#006747] flex items-center gap-1.5 mb-1">
+          <i class="fa-solid fa-universal-access text-[#009CA6]"></i> Precisa de ajuda para preencher o formulário?
+        </p>
+        <p>
+          Se você tem deficiência ou limitação tecnológica que dificulte o preenchimento, você tem direito a atendimento assistido. Use os canais de suporte indicados na plataforma, conforme a Lei nº 13.146/2015 (Estatuto da Pessoa com Deficiência).
+        </p>
+      </div>
+
+      <div class="mt-5 sm:mt-6">
+        <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+          <span id="stepIndicatorLabel">Etapa 1 de 4</span>
+        </div>
+        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+          <div id="stepProgressBar" class="bg-[#009CA6] h-full transition-all duration-300 w-1/4"></div>
+        </div>
+      </div>
+
+      <!-- BOTÃO DE DESCARTAR RASCUNHO -->
+      <button type="button" onclick="descartarRascunho()" class="mt-3 text-[11px] text-gray-500 underline hover:text-[#006747]">
+        <i class="fa-solid fa-eraser mr-1"></i>Limpar os dados preenchidos neste navegador
+      </button>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <form id="accessForm" autocomplete="on" novalidate class="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 pt-3.5 pb-5 sm:px-6 sm:pt-4 sm:pb-6 space-y-6">
+
+      <!-- ETAPA 1: CADASTRO DO PESQUISADOR / SOLICITANTE -->
+      <div id="step1" class="step-pane space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">1</span>
+            Cadastro do Pesquisador / Solicitante (Etapa ①)
+          </h3>
+        </div>
+
+        <!-- Reaproveitamento de cadastro prévio (CPF + código por e-mail) -->
+        <div id="boxRetorno" class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2.5">
+          <p class="text-sm font-bold text-[#006747]"><i class="fa-solid fa-user-check mr-1"></i> Já fez uma solicitação ao CPDoc antes?</p>
+          <p class="text-xs text-gray-700">Informe o seu CPF. Enviaremos um código para o e-mail do seu cadastro e você não precisará anexar o documento de identificação novamente.</p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="cpfRetorno" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" class="flex-1 p-2.5 border rounded-xl text-sm focus-fmusp" oninput="maskCpfRetorno(this)">
+            <button type="button" id="btnEnviarCodigo" onclick="solicitarCodigo()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-[#006747] text-white hover:opacity-90">Enviar código</button>
+          </div>
+          <div id="retornoCodigoWrap" class="hidden">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input type="text" id="codigoRetorno" inputmode="numeric" maxlength="6" placeholder="Código de 6 dígitos" autocomplete="one-time-code" class="flex-1 p-2.5 border rounded-xl text-sm focus-fmusp tracking-widest">
+              <button type="button" id="btnConfirmarCodigo" onclick="confirmarCodigo()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-[#009CA6] text-white hover:opacity-90">Confirmar código</button>
+            </div>
+          </div>
+          <p id="retornoMsg" class="text-xs hidden"></p>
+          <p class="text-[11px] text-gray-500">Primeira vez por aqui? Basta preencher os dados abaixo e anexar o documento de identificação.</p>
+        </div>
+
+        <div id="boxIdentificado" class="hidden p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-sm text-emerald-900">
+          <p class="font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Identidade confirmada por código enviado ao seu e-mail.</p>
+          <p class="text-xs mt-1">Seus dados foram preenchidos a partir do cadastro anterior e o envio de documentos de identificação foi dispensado. Você pode atualizar o telefone, se necessário.</p>
+          <button type="button" onclick="desfazerIdentificacao(true)" class="mt-2 text-xs underline font-semibold">Não sou eu / preencher manualmente</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome Completo *</label>
+            <input type="text" id="nomeSolicitante" name="name" autocomplete="name" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Nome completo do pesquisador ou solicitante" required oninput="salvarRascunho()">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tipo de Documento & Identificação *</label>
+            <div class="grid grid-cols-3 gap-2">
+              <select id="tipoDocumento" class="p-2.5 border rounded-xl text-sm focus-fmusp bg-white" onchange="alternarMascaraDocumento(); salvarRascunho();">
+                <option value="CPF">CPF (Brasil)</option>
+                <option value="Passaporte">Passaporte</option>
+              </select>
+              <input type="text" id="documentoNumero" class="col-span-2 p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="000.000.000-00" maxlength="18" oninput="maskDoc(this)" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Vínculo Institucional *</label>
+            <select id="vinculoInstitucional" name="vinculoInstitucional" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required onchange="aoMudarVinculo(); salvarRascunho();">
+              <option value="Discente de graduação">Discente de graduação</option>
+              <option value="Discente de pós-graduação">Discente de pós-graduação</option>
+              <option value="Docente-pesquisador">Docente-pesquisador</option>
+              <option value="Pesquisador externo independente">Pesquisador externo independente</option>
+              <option value="Profissional de imprensa">Profissional de imprensa</option>
+              <option value="Editora ou produtora">Editora ou produtora</option>
+              <option value="Pessoa física sem vínculo acadêmico">Pessoa física sem vínculo acadêmico</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Instituição de Vínculo</label>
+            <input type="text" id="instituicaoVinculo" name="instituicaoVinculo" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Universidade, veículo de imprensa, editora ou 'Não se aplica'">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail Institucional ou Pessoal *</label>
+            <input type="email" id="emailSolicitante" name="email" autocomplete="email" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="exemplo@universidade.br ou pessoal" required>
+            <p class="text-[10px] text-gray-500 mt-1">A comunicação oficial do protocolo e das decisões será enviada a este e-mail.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Telefone / WhatsApp *</label>
+            <input type="text" id="telefoneSolicitante" name="tel" autocomplete="tel" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="(11) 90000-0000" maxlength="15" oninput="maskTelefone(this)" required>
+          </div>
+        </div>
+
+        <div id="boxUploadsIdent" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+              Documento de Identificação (RG, CIN, CNH ou Passaporte com foto) *
+            </label>
+            <input type="file" id="uploadDocIdentidade" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#006747] file:text-white hover:file:opacity-90 cursor-pointer" required>
+            <p class="text-[10px] text-gray-500 mt-1">Formatos aceitos: PDF, JPG, PNG. Fotos são reduzidas automaticamente; o total de anexos deve ficar em até 3 MB.</p>
+          </div>
+
+          <div id="boxComprovanteVinculo">
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+              Comprovante de Vínculo <span id="labelVinculoOpcional" class="text-gray-400 font-normal">(Recomendado)</span>
+            </label>
+            <input type="file" id="uploadComprovanteVinculo" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#009CA6] file:text-white hover:file:opacity-90 cursor-pointer">
+            <p class="text-[10px] text-gray-500 mt-1">Declaração de matrícula, carta do orientador, apresentação institucional ou crachá.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 2: FINALIDADE DA CONSULTA E DO USO PRETENDIDO -->
+      <div id="step2" class="step-pane hidden space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">2</span>
+            Finalidade da Consulta e do Uso Pretendido (Etapa ②)
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Natureza da Finalidade *</label>
+            <select id="naturezaFinalidade" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required onchange="aoMudarNatureza(); salvarRascunho();">
+              <option value="Pesquisa acadêmica (TCC, dissertação, tese, artigo)">Pesquisa acadêmica (TCC, dissertação, tese, artigo)</option>
+              <option value="Pesquisa institucional ou curatorial">Pesquisa institucional ou curatorial</option>
+              <option value="Finalidade jornalística ou editorial">Finalidade jornalística ou editorial</option>
+              <option value="Produção audiovisual ou documental">Produção audiovisual ou documental</option>
+              <option value="Finalidade pessoal ou genealógica">Finalidade pessoal ou genealógica</option>
+              <option value="Outra (especificar)">Outra (especificar)</option>
+            </select>
+          </div>
+
+          <div id="boxOutraFinalidade" class="hidden">
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Especifique a Finalidade *</label>
+            <input type="text" id="outraFinalidadeTexto" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Especifique detalhadamente a finalidade pretendida">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-bold text-gray-700 uppercase">
+              Descrição Sucinta do Projeto * <span class="font-normal text-gray-500">(Mínimo de 100 caracteres)</span>
+            </label>
+            <span id="charCountProjeto" class="text-[11px] font-semibold text-gray-500">0 / 100 caracteres</span>
+          </div>
+          <textarea id="descricaoProjeto" rows="4" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Descreva os objetivos da pesquisa, linha temática, abrangência cronológica e a estreita relação pretendida com o(s) item(ns) sob guarda do Museu..." required oninput="atualizarContadorProjeto()"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Órgão de Fomento ou Financiamento (se houver)</label>
+            <input type="text" id="orgaoFomento" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Ex: FAPESP, CNPq, CAPES, etc.">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Previsão de Publicação ou Divulgação *</label>
+            <select id="previsaoPublicacao" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+              <option value="Ainda não definido">Ainda não definido</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-amber-950 uppercase mb-1">
+              Aprovação em Comitê de Ética em Pesquisa (CEP/CONEP) *
+            </label>
+            <select id="aprovacaoCEP" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required onchange="aoMudarCEP(); salvarRascunho();">
+              <option value="Não se aplica">Não se aplica (pesquisa sem dados de pacientes ou humanos identificáveis)</option>
+              <option value="Sim">Sim (aprovado por CEP/CONEP)</option>
+              <option value="Não">Não (em tramitação ou pendente)</option>
+            </select>
+            <p class="text-[11px] text-amber-900 mt-1.5 leading-relaxed">
+              Obrigatório quando a pesquisa envolver dados de pacientes, prontuários ou material biológico humano identificável. Aciona avaliação curatorial prévia e, quando cabível, a exigência de aprovação prévia de Comitê de Ética em Pesquisa ou parecer técnico da curadoria (itens 2 e 3 do Termo).
+            </p>
+          </div>
+
+          <div id="boxUploadCEP" class="hidden pt-2 border-t border-amber-200">
+            <label class="block text-xs font-bold text-amber-950 uppercase mb-1">
+              Upload do Parecer Consubstanciado do CEP/CONEP *
+            </label>
+            <input type="file" id="uploadParecerCEP" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-800 file:text-white cursor-pointer">
+            <p class="text-[10px] text-amber-800 mt-1">Formatos aceitos: PDF, JPG, PNG. Fotos são reduzidas automaticamente; o total de anexos deve ficar em até 3 MB.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 3: ITENS DO ACERVO SOLICITADOS E MODALIDADE DE ATENDIMENTO -->
+      <div id="step3" class="step-pane hidden space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">3</span>
+            Itens do Acervo Solicitados e Modalidade de Atendimento (Etapa ③)
+          </h3>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Modalidade de Atendimento Pretendida *</label>
+          <select id="modalidadeAtendimento" class="w-full p-2.5 border-2 border-[#009CA6] rounded-xl text-sm focus-fmusp bg-white font-semibold text-[#006747]" required onchange="aoMudarModalidade(); salvarRascunho();">
+            <option value="Consulta Presencial (in loco, no Museu)">Consulta Presencial (in loco, no Museu)</option>
+            <option value="Atendimento Remoto (envio de reprodução, sem comparecimento presencial)">Atendimento Remoto (envio de reprodução, sem comparecimento presencial)</option>
+            <option value="Ambas">Ambas (consulta presencial seguida de solicitação de reprodução)</option>
+          </select>
+          <p class="text-[11px] text-gray-500 mt-1">A escolha da modalidade habilitará automaticamente os blocos de agendamento presencial e/ou parâmetros de reprodução remota.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Código(s) de Referência do(s) Item(ns) *</label>
+            <input type="text" id="codigosReferencia" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Ex: Fundo Lacaz / Cx. 12; Peça Anatômica 045; Doc. FMUSP-1932-04" required>
+            <p class="text-[10px] text-gray-500 mt-1">Conforme catálogo, inventário ou guia do acervo online do Museu.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade Estimada de Itens *</label>
+            <input type="number" id="quantidadeItens" min="1" max="100" value="1" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" required oninput="verificarAvisoVolume()">
+          </div>
+        </div>
+
+        <div id="boxAlertaVolume" class="hidden p-3.5 bg-blue-50 border border-[#009CA6] rounded-xl text-xs text-gray-700">
+          <p class="font-bold text-[#006747] uppercase flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-[#009CA6]"></i> Limite Inicial de 15 Itens por Solicitação
+          </p>
+          <p class="mt-1">
+            Para garantir a integridade física e o controle curatorial, o limite recomendado por chamada é de até 15 itens. Para acervos ou conjuntos maiores, a equipe técnica poderá fracionar a consulta ou orientar o envio de solicitação complementar após a primeira triagem.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Detalhada do(s) Item(ns) Solicitado(s) *</label>
+          <textarea id="descricaoItens" rows="3" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Indique títulos, autores, datas aproximadas, séries documentais, tipologia dos objetos ou peças que deseja consultar..." required></textarea>
+        </div>
+      </div>
+
+      <!-- ETAPA 4 (CONDICIONAL): CONSULTA PRESENCIAL (IN LOCO): AGENDAMENTO -->
+      <div id="step4" class="step-pane hidden space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">4</span>
+            Consulta Presencial (In Loco): Dados de Agendamento (Etapa ④)
+          </h3>
+        </div>
+
+        <div class="p-3 bg-[#f0f8f6] border border-[#009CA6]/40 rounded-xl text-xs text-gray-800">
+          <i class="fa-solid fa-calendar-check text-[#009CA6] mr-1"></i>
+          <strong>Sua solicitação inclui consulta presencial.</strong> Indique suas opções de data e detalhes operacionais para que a equipe técnica verifique a disponibilidade de espaço e equipe técnica.
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Datas Pretendidas para a Visita (em ordem de preferência) *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-600 mb-0.5">1ª Opção (Principal) *</label>
+              <input type="date" id="dataVisita1" class="w-full p-2 border rounded-xl text-xs focus-fmusp bg-white" required>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-600 mb-0.5">2ª Opção (Alternativa)</label>
+              <input type="date" id="dataVisita2" class="w-full p-2 border rounded-xl text-xs focus-fmusp bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-600 mb-0.5">3ª Opção (Alternativa)</label>
+              <input type="date" id="dataVisita3" class="w-full p-2 border rounded-xl text-xs focus-fmusp bg-white">
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-500 mt-1">Sujeitas à confirmação de disponibilidade da agenda técnica do Museu (item 4 do Termo).</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Turno Preferencial *</label>
+            <select id="turnoVisita" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+              <option value="Manhã">Manhã (09h00 às 12h00)</option>
+              <option value="Tarde">Tarde (14h00 às 17h00)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Duração Estimada da Consulta *</label>
+            <select id="duracaoVisita" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+              <option value="Até 2 (duas) horas">Até 2 (duas) horas</option>
+              <option value="Meio período">Meio período (3 horas)</option>
+              <option value="Dia inteiro">Dia inteiro</option>
+              <option value="Múltiplas sessões">Múltiplas sessões (especificar nos comentários)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
+          <label class="block text-xs font-bold text-gray-700 uppercase">
+            Acompanhante(s) na Consulta Presencial (se houver)
+          </label>
+          <p class="text-[11px] text-gray-500 -mt-1">
+            Acompanhantes só podem ingressar no espaço de guarda se previamente informados e autorizados pela equipe técnica (item 4.2.7 do Termo).
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <input type="text" id="nomeAcompanhante" class="w-full p-2 border rounded-xl text-xs focus-fmusp bg-white" placeholder="Nome completo do acompanhante">
+            </div>
+            <div>
+              <input type="file" id="uploadDocAcompanhante" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-700 file:text-white cursor-pointer">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Equipamento Técnico Especial Necessário</label>
+          <input type="text" id="equipamentoEspecial" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp" placeholder="Ex: Lupa, mesa de luz, leitor de microfilme, berço de apoio ou leitor de mídia obsoleta">
+        </div>
+      </div>
+
+      <!-- ETAPA 5 (CONDICIONAL): ATENDIMENTO REMOTO: REPRODUÇÃO E FORMA DE ENTREGA -->
+      <div id="step5" class="step-pane hidden space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">5</span>
+            Atendimento Remoto: Reprodução e Forma de Entrega (Etapa ⑤)
+          </h3>
+        </div>
+
+        <div class="p-3 bg-[#f0f8f6] border border-[#009CA6]/40 rounded-xl text-xs text-gray-800">
+          <i class="fa-solid fa-cloud-arrow-down text-[#009CA6] mr-1"></i>
+          <strong>Sua solicitação inclui atendimento remoto.</strong> Indique o tipo de reprodução e a forma de entrega desejadas.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tipo de Reprodução Solicitada *</label>
+            <select id="tipoReproducao" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+              <option value="Consulta a cópia ou reprodução já existente">Consulta a cópia ou reprodução já existente</option>
+              <option value="Reprodução fotográfica digital (nova captura)">Reprodução fotográfica digital (nova captura)</option>
+              <option value="Digitalização/escaneamento de documento textual">Digitalização/escaneamento de documento textual</option>
+              <option value="Cópia de arquivo audiovisual ou sonoro">Cópia de arquivo audiovisual ou sonoro</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Resolução / Formato Desejado *</label>
+            <select id="resolucaoDesejada" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+              <option value="Baixa resolução (uso em tela - consulta/estudo gratuito)">Baixa resolução (uso em tela - consulta/estudo gratuito)</option>
+              <option value="Alta resolução (uso editorial/impressão - sujeito a análise técnica)">Alta resolução (uso editorial/impressão - sujeito a análise técnica)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Forma de Entrega Preferencial *</label>
+          <select id="formaEntrega" class="w-full p-2.5 border rounded-xl text-sm focus-fmusp bg-white" required>
+            <option value="Link de download seguro com prazo de expiração (padrão)">Link de download seguro com prazo de expiração (padrão)</option>
+            <option value="E-mail institucional (arquivos de até 10 MB)">E-mail institucional (arquivos de até 10 MB)</option>
+            <option value="Retirada presencial de mídia física (pendrive/CD, mediante agendamento prévio)">Retirada presencial de mídia física (pendrive/CD, mediante agendamento prévio)</option>
+          </select>
+          <p class="text-[10px] text-gray-500 mt-1">Não é oferecido envio postal de cópias físicas, salvo exceção justificada e aprovada pela curadoria (item 5 do Termo).</p>
+        </div>
+
+        <div class="p-3.5 bg-gray-50 border border-gray-300 rounded-xl">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="checkCienciaCusto" class="mt-1 rounded text-[#006747]" required>
+            <span class="text-xs text-gray-800 font-semibold leading-relaxed">
+              Declaro ciência de que o prazo de atendimento e o eventual custo de reprodução (estritamente limitado ao ressarcimento do custo real do serviço, conforme o item 5 do Termo) serão informados após a triagem técnica do pedido.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ETAPA FINAL: MODALIDADE DE USO, CITAÇÃO, TEXTO LEGAL E ACEITE -->
+      <div id="stepFinal" class="step-pane hidden space-y-5">
+        <div class="border-b border-gray-200 pb-2.5 -mt-1">
+          <h3 class="text-lg font-heading font-bold text-[#006747] flex items-center gap-2">
+            <span id="stepFinalBadge" class="w-6 h-6 rounded-full bg-[#009CA6] text-white text-xs flex items-center justify-center font-bold">4</span>
+            Modalidade de Uso, Crédito Institucional e Assinatura Digital (Etapa ⑥)
+          </h3>
+        </div>
+
+        <!-- USO PRETENDIDO -->
+        <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+          <label class="block text-xs font-bold text-[#006747] uppercase tracking-wider">
+            Uso Pretendido do Material Reproduzido / Consultado (selecione um ou mais) *
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Inclusão em trabalho acadêmico" class="rounded text-[#006747]">
+              <span>Inclusão em trabalho acadêmico (TCC, tese, dissertação)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Publicação impressa" class="rounded text-[#006747]">
+              <span>Publicação impressa (livro, revista científica)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Publicação digital ou site" class="rounded text-[#006747]">
+              <span>Publicação digital ou website institucional</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Redes sociais" class="rounded text-[#006747]">
+              <span>Redes sociais e divulgação científica</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Exposição museológica ou expografia externa" class="rounded text-[#006747]">
+              <span>Exposição museológica ou expografia externa</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer">
+              <input type="checkbox" name="usoPretendido" value="Material didático" class="rounded text-[#006747]">
+              <span>Material didático e cursos de formação</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer sm:col-span-2">
+              <input type="checkbox" name="usoPretendido" value="Uso comercial" id="checkUsoComercial" class="rounded text-[#006747]" onchange="aoMudarUsoComercial(this.checked)">
+              <span class="font-semibold text-amber-900">Uso comercial (produto, licenciamento ou merchandising)</span>
+            </label>
+          </div>
+
+          <div id="boxAlertaComercial" class="hidden p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900">
+            <strong>Aviso Legal (Item 9 do Termo):</strong> A seleção de uso comercial não substitui a autorização específica, prévia e expressa do Museu, formalizada obrigatoriamente em instrumento apartado, definindo condições e limites próprios de exploração econômica.
+          </div>
+        </div>
+
+        <!-- FORMA DE CITAÇÃO / CRÉDITO AO MUSEU -->
+        <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
+          <div class="flex justify-between items-center">
+            <label class="block text-xs font-bold text-[#006747] uppercase">
+              <i class="fa-solid fa-quote-left text-[#009CA6] mr-1"></i> Forma de Citação / Crédito Institucional Obrigatório (Anexo I)
+            </label>
+            <button type="button" onclick="copiarCredito()" class="text-[11px] font-semibold text-[#009CA6] hover:text-[#006747] flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> Copiar padrão
+            </button>
+          </div>
+          <div id="textoCreditoPadrao" class="p-3 bg-white border border-gray-300 rounded-lg text-xs font-mono text-gray-800 select-all leading-relaxed">
+            Acervo do Museu Histórico "Prof. Carlos da Silva Lacaz" da Faculdade de Medicina da Universidade de São Paulo — MHFM-USP. Nº de tombamento/inventário: [código do item]. [Autoria, quando identificada]. [Título ou descrição do item], [datação].
+          </div>
+          <p class="text-[11px] text-gray-600">
+            Conforme a norma ABNT NBR 6023/2018 e o item 8 do Termo. A omissão do crédito ou apresentação inexata sujeita o solicitante às sanções do item 12.
+          </p>
+
+          <div class="pt-2">
+            <label class="flex items-start gap-2.5 cursor-pointer">
+              <input type="checkbox" id="checkDireitosTerceiros" class="mt-1 rounded text-[#006747]" required>
+              <span class="text-xs text-gray-800 font-semibold leading-relaxed">
+                Declaro ciência de que a autorização não transfere direitos autorais de terceiros e que verificarei a existência de direitos incidentes sobre a obra ou bem, quando aplicável (item 7 do Termo e Lei nº 9.610/1998).
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- QUADRO ROLÁVEL DO TEXTO LEGAL (REFORMULADO) -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-xs font-bold text-[#006747] uppercase">
+              <i class="fa-solid fa-scale-balanced text-[#009CA6] mr-1"></i> Texto Legal do Instrumento (Leitura Obrigatória)
+            </label>
+            <span class="text-[11px] text-gray-400">Role para ler na íntegra</span>
+          </div>
+
+          <div id="textoLegal" class="legal-scroll h-48 overflow-y-auto p-4 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-700 font-serif space-y-2 leading-relaxed">
+            <p class="font-bold font-sans text-center text-gray-900 border-b pb-2 mb-2">TERMO PARA ACESSO E REPRODUÇÃO DE ACERVO</p>
+            
+            <p><strong>Precisa de ajuda para preencher o formulário?</strong> Se você tem deficiência ou limitação tecnológica que dificulte o preenchimento, você tem direito a atendimento assistido. Use os canais de suporte indicados na plataforma, conforme a Lei nº 13.146/2015 (Estatuto da Pessoa com Deficiência).</p>
+            
+            <p class="font-bold text-gray-900 mt-2 font-sans">Quem são as partes deste Termo</p>
+            <p>Este é o Termo para Acesso e Reprodução de Acervo, chamado neste documento de “Termo”. As partes são:</p>
+            <p class="pl-4">(a) Você, que solicita acesso ao acervo e se identifica com os dados informados na Etapa ① do formulário. Neste Termo, você é o “Solicitante”;</p>
+            <p class="pl-4">(b) O Museu Histórico “Prof. Carlos da Silva Lacaz” da Faculdade de Medicina da USP, chamado de “Museu”. O Museu é um órgão integrante da estrutura da Faculdade de Medicina da USP (FMUSP), à qual está vinculado e subordinado, conforme o Estatuto da USP, o Regimento Geral da USP e o regimento da própria Faculdade. A FMUSP é uma Unidade da USP (categoria que reúne Institutos, Faculdades e Escolas, no art. 5º do Estatuto). A USP é autarquia estadual de regime especial, com personalidade jurídica de direito público (uma entidade pública estadual), regida pelo Estatuto (Resolução USP nº 3.461, de 7 de outubro de 1988) e pelo Regimento Geral (Resolução USP nº 3.745, de 19 de outubro de 1990), inscrita no CNPJ sob nº 63.025.530/0001-04, com sede em São Paulo (Capital). O Museu guarda e gerencia o acervo, conforme o Estatuto de Museus (Lei nº 11.904/2009) e o Decreto nº 8.124/2013.</p>
+            <p>Você e o Museu concordam com o seguinte:</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">1. SOBRE O QUE É ESTE TERMO</p>
+            <p class="pl-4">1.1. Este Termo define as regras para acessar, consultar e/ou reproduzir itens do acervo do Museu, por qualquer meio ou formato. Os itens que você indicou na Etapa ③ são para a finalidade declarada na Etapa ②.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">2. PRAZOS, DECISÃO, RECURSO E ATENDIMENTO ACESSÍVEL</p>
+            <p class="pl-4">2.1. O sistema confirma o recebimento do seu pedido em até 3 (três) dias úteis.</p>
+            <p class="pl-4">2.2. O Museu responde em até 10 (dez) dias úteis do recebimento. A resposta explica os motivos da decisão. O prazo pode ser prorrogado, com comunicação justificada a você.</p>
+            <p class="pl-4">2.3. Enviar o pedido não garante aprovação. Com base em critérios técnicos, jurídicos e de conservação, o Museu pode: (a) aprovar o pedido, no todo ou em parte; (b) não aprová-lo; ou (c) restringir ou condicionar o acesso ou a reprodução.</p>
+            <p class="pl-4">2.4. Se o pedido for negado, restringido ou condicionado, cabe recurso à coordenação do Museu, pelo próprio sistema, em até 10 (dez) dias úteis contados de quando você fica sabendo da decisão.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">3. FORMAS DE ACESSO E CONDIÇÕES GERAIS</p>
+            <p class="pl-4">3.1. O acesso pode ser: consulta presencial (no Museu), atendimento remoto (o Museu envia a reprodução do item) ou as duas formas combinadas, conforme a opção aprovada na Etapa ③.</p>
+            <p class="pl-4">3.2. Em qualquer forma, o acesso depende da disponibilidade técnica do item, do seu estado de conservação e da compatibilidade da consulta com as políticas de salvaguarda (proteção) do Museu.</p>
+            <p class="pl-4">3.3. O Museu pode recusar, limitar ou condicionar o acesso a itens frágeis, em processo de restauro, com restrições de proveniência declaradas pelo doador original ou com dados sensíveis não anonimizados. Nesses casos, pode exigir aprovação prévia de Comitê de Ética em Pesquisa ou parecer técnico da curadoria.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">4. CONSULTA PRESENCIAL: AGENDAMENTO E NORMAS DE MANUSEIO</p>
+            <p class="pl-4 font-semibold text-gray-900">4.1. Agendamento</p>
+            <p class="pl-8">4.1.1. A consulta presencial depende de agendamento prévio. O Museu confirma as datas, o turno e a duração estimada que você informou na Etapa ④, conforme a disponibilidade da agenda técnica e dos espaços de consulta. Se as datas que você prefere não estiverem livres, o Museu pode propor alternativas.</p>
+            <p class="pl-8">4.1.2. O Museu pode remarcar ou cancelar a sessão por justificativa técnica, comunicando você com antecedência razoável.</p>
+            <p class="pl-8">4.1.3. No dia da consulta, apresente documento de identificação original e siga estritamente as orientações da equipe técnica.</p>
+            
+            <p class="pl-4 font-semibold text-gray-900">4.2. Regras de manuseio (entre outras que a equipe possa definir)</p>
+            <p class="pl-8">4.2.1. Anote apenas com lápis grafite, sem borracha.</p>
+            <p class="pl-8">4.2.2. Mantenha as mãos limpas e secas. Use luvas, apoios, pesos ou berços quando exigido pela equipe, sobretudo com bens tridimensionais e fotografias antigas.</p>
+            <p class="pl-8">4.2.3. Não apoie braços, bolsas, equipamentos ou objetos sobre os itens.</p>
+            <p class="pl-8">4.2.4. Não force aberturas, dobras, planificações ou movimentos incompatíveis com o estado de conservação do item.</p>
+            <p class="pl-8">4.2.5. Não leve nem consuma alimentos, bebidas ou substâncias potencialmente danosas na área de consulta.</p>
+            <p class="pl-8">4.2.6. Não fotografe, não filme e não escaneie diretamente os itens sem autorização prévia da equipe técnica.</p>
+            <p class="pl-8">4.2.7. Acompanhantes só podem entrar se estiverem informados e autorizados antes, na Etapa ④.</p>
+            <p class="pl-4">4.3. O Museu pode restringir, interromper ou encerrar a consulta a qualquer momento se houver risco à integridade física, documental ou informacional do acervo. Se você descumprir estas orientações por dolo (intenção de causar dano) ou culpa (negligência), você responde pelos danos causados ao bem.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">5. ATENDIMENTO REMOTO E ENVIO DE REPRODUÇÕES</p>
+            <p class="pl-4">5.1. No atendimento remoto, você não vai ao Museu. A equipe técnica produz a reprodução dos itens e a disponibiliza a você só em meio digital: link de download seguro com prazo de expiração ou e-mail institucional, conforme a forma de entrega e o volume do arquivo indicados na Etapa ⑤.</p>
+            <p class="pl-4">5.2. Em regra, não há envio postal de cópias físicas. A curadoria pode autorizar expressamente exceções justificadas; nesses casos, a retirada da mídia física pode ser presencial, com agendamento.</p>
+            <p class="pl-4">5.3. O prazo do serviço remoto será informado na aprovação, respeitado o prazo geral do item 2, e varia conforme a complexidade da reprodução e a disponibilidade da equipe.</p>
+            <p class="pl-4">5.4. Se houver cobrança, ela cobre apenas o custo real do serviço: materiais, mídia digital e trabalho técnico. É proibido cobrar pela simples busca ou disponibilização da informação, conforme a Lei federal nº 12.527/2011 (Lei de Acesso à Informação), a Lei estadual nº 13.319/2018 e o Decreto federal nº 7.724/2012. Há isenção em caso de comprovada finalidade acadêmica sem fins lucrativos, mediante análise da curadoria.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">6. REPRODUÇÃO AUTORIZADA E SEUS LIMITES</p>
+            <p class="pl-4">6.1. A reprodução (fotográfica, digital, escaneamento ou cópia) será feita, sempre que possível, pela equipe técnica do Museu ou sob sua supervisão direta, para preservar a integridade física do bem. Vale para pedidos presenciais, remotos ou combinados.</p>
+            <p class="pl-4">6.2. Você não pode usar equipamentos, flash, contato manual direto ou técnicas não autorizadas previamente pela curadoria.</p>
+            <p class="pl-4">6.3. Bem tridimensional nenhum é deslocado, desmontado ou reproduzido sem a presença e a autorização da equipe técnica do Museu.</p>
+            <p class="pl-4">6.4. Reproduções em baixa resolução, para leitura pessoal, estudo ou uso em sala de aula, são gratuitas e, em regra, com marca d'água institucional.</p>
+            <p class="pl-4">6.5. Alta resolução, sem marca d’água, para fins editoriais, comerciais ou de impressão, exige: (a) justificativa de necessidade gráfica direta; (b) avaliação técnica adicional do setor de conservação, que não é automática; e, (c) quando aplicável, taxa de serviço conforme a tabela vigente do Museu e o limite do item 5. Isso não dispensa o aceite deste Termo.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">7. PROPRIEDADE INTELECTUAL E DIREITOS AUTORAIS DE TERCEIROS</p>
+            <p class="pl-4">7.1. A autorização deste Termo permite só o acesso físico e técnico ao bem sob guarda do Museu. Ela não cede, não transfere e não renuncia a eventuais direitos autorais de terceiros (autores, fotógrafos, ilustradores, herdeiros) sobre a obra reproduzida, conforme a Lei nº 9.610/1998.</p>
+            <p class="pl-4">7.2. Verificar se esses direitos existem e obter, quando necessário, a autorização direta do titular é responsabilidade sua. O Museu não responde por infrações a direitos autorais de terceiros decorrentes do uso que você fizer da reprodução.</p>
+            <p class="pl-4">7.3. Bens do acervo em domínio público (proteção patrimonial extinta, nos arts. 41 a 45 da Lei nº 9.610/1998) seguem sujeitos aos direitos morais de atribuição de autoria e de integridade da obra (art. 24 da mesma Lei). O crédito institucional do item 8 permanece obrigatório.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">8. CRÉDITO E CITAÇÃO OBRIGATÓRIOS</p>
+            <p class="pl-4">8.1. Ao usar, publicar, exibir, transmitir ou divulgar o material consultado ou reproduzido, por qualquer meio, inclua o crédito expresso ao Museu na forma indicada no ato da solicitação (Etapa ⑥). O crédito deve conter, no mínimo: (a) a expressão “Acervo do Museu Histórico da Faculdade de Medicina da USP”; (b) o número de tombamento ou registro equivalente do item; (c) quando disponíveis, os elementos de autoria, título ou descrição e datação.</p>
+            <p class="pl-4">8.2. Sem o crédito, aplicam-se as sanções previstas no item 12.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">9. PROIBIÇÃO DE USO COMERCIAL NÃO AUTORIZADO</p>
+            <p class="pl-4">9.1. É proibido usar o material consultado ou reproduzido para fins comerciais, publicitários, de licenciamento a terceiros ou de exploração econômica, direta ou indireta. A exceção exige autorização específica, prévia e expressa do Museu, formalizada em instrumento apartado. Esse instrumento define as condições financeiras e os limites de uso comercial, que não estão cobertos por este Termo.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">10. DADOS SENSÍVEIS E CONFORMIDADE COM A LGPD</p>
+            <p class="pl-4">10.1. Se o material consultado ou reproduzido contiver dados pessoais sensíveis de pacientes, profissionais de saúde ou terceiros identificáveis (imagens de corpo humano, prontuários, laudos ou histórico clínico), você deve: (a) usar esses dados exclusivamente para a finalidade de pesquisa ou uso declarada na Etapa ②; (b) cumprir as exigências éticas aplicáveis, incluindo, quando cabível, aprovação de Comitê de Ética em Pesquisa, conforme as Resoluções CNS nº 466/2012 e nº 510/2016; (c) anonimizar ou pseudonimizar os dados em suas publicações, salvo se a identificação for estrita e comprovadamente necessária à finalidade histórico-científica da pesquisa e amparada em base legal do art. 7º ou do art. 11 da Lei nº 13.709/2018 (LGPD); (d) responder por qualquer uso que exceda esses limites ou viole direitos de personalidade de terceiros, ficando o Museu excluído dessa responsabilidade.</p>
+            
+            <p class="pl-4 font-semibold text-gray-900">10.2. Bases legais do tratamento de dados</p>
+            <p class="pl-8">10.2.1. Dados sensíveis de terceiros, quando autorizados: art. 11, inciso II, da LGPD, alíneas “a” (cumprimento de obrigação legal), “e” (estudos por órgão de pesquisa, com anonimização sempre que possível) e “f” (exercício regular de direitos), e art. 13 da LGPD (acesso a dados de saúde para estudos por órgão de pesquisa).</p>
+            <p class="pl-8">10.2.2. Seus dados pessoais, coletados na Etapa ①: art. 7º, incisos I (consentimento capturado no aceite eletrônico), II (cumprimento de obrigação legal ou regulatória), V (exercício regular de direitos em processo administrativo) e IX (interesse legítimo na gestão das solicitações), com a finalidade de gestão do protocolo e eventual defesa em processo administrativo.</p>
+            <p class="pl-4">10.3. Guarda dos dados: pelo prazo da Tabela de Temporalidade de Documentos da USP (Portaria GR nº 7.656/2021) e, subsidiariamente, da Tabela de Temporalidade Documental do Conselho Nacional de Arquivos (CONARQ), normalmente, 5 (cinco) anos após a conclusão do atendimento. Depois, os dados são eliminados ou anonimizados.</p>
+            <p class="pl-4">10.4. Aplica-se, ainda, a Portaria GR nº 7.674, de 30 de setembro de 2021, sobre a LGPD no âmbito da USP.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">11. ENTREGA DE EXEMPLAR DO TRABALHO RESULTANTE</p>
+            <p class="pl-4">11.1. Quando aplicável, envie ao Museu, sem custo e pelo próprio sistema, 1 (um) exemplar digital do trabalho, produto ou publicação resultante do uso autorizado. O prazo será definido na aprovação ou, na falta dele, é de até 60 (sessenta) dias úteis após a publicação, defesa, exibição ou divulgação.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">12. SANÇÕES POR DESCUMPRIMENTO</p>
+            <p class="pl-4">12.1. Descumprir qualquer obrigação deste Termo – uso indevido, uso comercial não autorizado, ausência de crédito institucional, não comparecimento injustificado à consulta agendada, não entrega do exemplar do item 11 ou violação das condições de manuseio – sujeita você, sem prejuízo de outras medidas nas esferas cível e criminal, a: (a) suspensão imediata da autorização de uso e reprodução; (b) obrigação de retirar ou corrigir o material usado de forma irregular; (c) impedimento de novas solicitações de acesso ao acervo do Museu; (d) responsabilização civil por eventuais danos materiais ou morais causados ao Museu, ao acervo ou a terceiros.</p>
+
+            <p class="font-bold text-gray-900 mt-2 font-sans">13. VALIDADE, ACEITE DIGITAL E FORO</p>
+            <p class="pl-4">13.1. O Termo se conclui pelo seu aceite eletrônico que tem validade jurídica plena e dispensa papel, reconhecimento de firma e assinatura manuscrita, conforme o art. 10 da Medida Provisória nº 2.200-2/2001, o art. 5º, inciso I, da Lei nº 14.063/2020 (assinatura eletrônica simples com entes públicos) e a legislação civil aplicável aos negócios jurídicos eletrônicos.</p>
+            <p class="pl-4">13.2. Por ser a USP autarquia estadual, você e o Museu combinam que eventuais questões judiciais serão decididas no foro da Comarca da Capital do Estado de São Paulo (Varas da Fazenda Pública).</p>
+          </div>
+        </div>
+
+        <!-- DECLARAÇÕES DE ACEITE -->
+        <div class="space-y-3 bg-white p-4 border-2 border-[#009CA6] rounded-xl">
+          <p class="text-xs font-bold text-[#006747] uppercase">Declarações Finais de Aceite (Assinale todas para habilitar o envio):</p>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Declaro que as informações que prestei neste formulário são verdadeiras e que a finalidade de uso declarada corresponde ao real propósito da minha consulta e/ou reprodução (item 1 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Vou utilizar o(s) item(ns) e/ou a(s) reprodução(ões) exclusivamente para as finalidades que declarei, sem uso comercial não autorizado e sem técnicas de reprodução não autorizadas (itens 6, 9 e 12 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Vou incluir, em toda publicação, exibição ou divulgação do material, o crédito institucional ao Museu na forma indicada no Anexo I (item 8 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Sei que a reprodução autorizada não transfere direitos autorais de terceiros — autores, fotógrafos, ilustradores, herdeiros — e que obter as autorizações adicionais, quando necessárias, é responsabilidade minha (item 7 do Termo e Lei nº 9.610/1998).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Na consulta presencial, vou comparecer na data e no horário confirmados pelo Museu e seguir as normas de manuseio e de conservação da equipe técnica; no atendimento remoto, sei que o prazo de atendimento e a forma de entrega serão os informados na aprovação (itens 4 e 5 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Autorizo o tratamento dos meus dados pessoais pelo Museu, conforme a Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades de controle de acesso ao acervo, gestão das solicitações e do protocolo, e eventual defesa em processo administrativo (item 10 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Quando aplicável, vou enviar ao Museu, sem custo e pelo próprio sistema, um exemplar digital do trabalho, produto ou publicação resultante do uso autorizado, no prazo definido na aprovação ou, na falta dele, de até 60 (sessenta) dias úteis após a publicação, defesa, exibição ou divulgação (item 11 do Termo).</span>
+          </label>
+
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
+            <span>Li e concordo integralmente com todo o conteúdo do Termo para Acesso e Reprodução de Acervo apresentado neste instrumento — aceite eletrônico com validade jurídica (item 13 do Termo).</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- BANNER DE ERRO DE ENVIO -->
+      <div id="submitError" role="alert" class="hidden p-3.5 bg-red-50 border border-red-300 rounded-xl text-xs text-red-800 font-semibold leading-relaxed"></div>
+
+      <!-- BOTÕES DE NAVEGAÇÃO -->
+      <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+        <button type="button" id="btnPrev" class="hidden px-5 py-2.5 border border-gray-300 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition" onclick="prevStep()">
+          <i class="fa-solid fa-arrow-left text-xs mr-1"></i> Voltar
+        </button>
+
+        <div class="ml-auto flex items-center gap-3">
+          <button type="button" id="btnNext" class="px-6 py-2.5 bg-[#006747] hover:bg-[#005037] text-white font-bold rounded-xl text-sm transition-all flex items-center gap-2 shadow-sm border border-[#009CA6]/40" onclick="nextStep()">
+            <span>Avançar</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+
+          <button type="button" id="btnSubmit" class="hidden px-6 py-2.5 bg-gray-400 text-white font-bold rounded-xl text-sm cursor-not-allowed transition-all shadow-sm" disabled onclick="finalizarAssinatura()">
+            <i class="fa-solid fa-signature mr-1.5"></i> Concordo e Assino Digitalmente
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- PAINEL DE SUCESSO E RECIBO DIGITAL -->
+    <div id="successPanel" class="hidden bg-white rounded-2xl border-2 border-[#009CA6] shadow-xl p-6 sm:p-10 space-y-6 text-center">
+      <div class="w-16 h-16 bg-[#e6f4f2] text-[#006747] rounded-full flex items-center justify-center mx-auto text-3xl font-bold shadow-sm border-2 border-[#009CA6]">
+        <i class="fa-solid fa-check-double"></i>
+      </div>
+      <div>
+        <h3 class="text-xl sm:text-2xl font-heading font-bold text-[#006747] text-center">
+          Solicitação Enviada com Sucesso!
+        </h3>
+        <p class="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto mt-2 leading-relaxed text-justify">
+          A sua solicitação foi transmitida ao Centro de Pesquisa e Documentação (CPDoc) do Museu Histórico da FMUSP: <span class="font-bold text-[#006747]">cpdoc.museufm@usp.br</span>.<br class="hidden sm:inline">
+          A solicitação e os arquivos anexados foram encaminhados à equipe técnica para triagem curatorial. A confirmação de recebimento ocorre em até 3 (três) dias úteis e a decisão fundamentada em até 10 (dez) dias úteis, prorrogáveis mediante comunicação justificada (item 2 do Termo).
+        </p>
+      </div>
+
+      <div class="max-w-lg mx-auto p-5 bg-gray-50 rounded-xl border border-gray-300 space-y-2.5 text-xs text-left">
+        <div class="flex justify-between border-b pb-1.5">
+          <span class="text-gray-500">Protocolo:</span>
+          <span id="displayProtocol" class="font-mono font-bold text-[#006747] text-sm"></span>
+        </div>
+        <div class="flex justify-between border-b pb-1.5">
+          <span class="text-gray-500">Data e Hora do Envio:</span>
+          <span id="displayTimestamp" class="font-mono text-gray-800"></span>
+        </div>
+        <div class="flex justify-between border-b pb-1.5">
+          <span class="text-gray-500">Situação Inicial:</span>
+          <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Recebida — aguardando triagem curatorial</span>
+        </div>
+        <div class="border-b pb-1.5">
+          <span class="text-gray-500 block mb-0.5">Hash SHA-256 do Termo Aceito (Versão do Instrumento):</span>
+          <span id="displayHashTermo" class="font-mono text-[10px] break-all bg-white p-2 rounded border block text-gray-700"></span>
+        </div>
+        <div class="border-b pb-1.5">
+          <span class="text-gray-500 block mb-0.5">Hash SHA-256 do Dossiê de Envio (Dados e Anexos):</span>
+          <span id="displayHashDossie" class="font-mono text-[10px] break-all bg-white p-2 rounded border block text-[#006747] font-semibold"></span>
+        </div>
+        <div class="flex justify-center pt-2">
+          <div id="qrcodeDisplay" class="p-2 bg-white rounded-lg border shadow-sm"></div>
+        </div>
+      </div>
+
+      <div class="max-w-lg mx-auto p-3.5 bg-blue-50/70 border border-[#009CA6]/40 rounded-xl text-xs text-gray-700 text-justify">
+        <p class="font-bold text-[#006747] mb-1"><i class="fa-solid fa-gavel mr-1"></i> Direito de Recurso (Item 2.4 do Termo):</p>
+        Se o pedido for indeferido, restringido ou condicionado, cabe recurso à coordenação do Museu, pelo próprio sistema ou pelo e-mail institucional <span class="font-mono font-semibold">cpdoc.museufm@usp.br</span>, no prazo de até 10 (dez) dias úteis a contar da ciência da decisão.
+      </div>
+
+      <div class="flex flex-wrap gap-3 justify-center pt-2">
+        <button type="button" id="btnDownloadPDF" class="px-5 py-2.5 bg-[#006747] hover:bg-[#005037] text-white rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2 border border-[#009CA6]" onclick="baixarPDFNovamente()">
+          <i class="fa-solid fa-file-pdf text-[#009CA6] text-base"></i> Baixar Comprovante em PDF
+        </button>
+        <button type="button" class="px-5 py-2.5 bg-black hover:bg-neutral-900 text-white rounded-xl font-bold text-xs transition border border-[#009CA6]" onclick="limparRascunhoERecarregar()">
+          Preencher Nova Solicitação
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RODAPÉ INSTITUCIONAL -->
+  <footer class="relative fmusp-water-bg text-white text-xs py-6 border-t-2 border-[#00C7B1]/40 mt-auto overflow-hidden">
+    <div class="fmusp-water-caustic"></div>
+    <div class="fmusp-water-ripples"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-1 drop-shadow-md">
+      <p class="text-white font-heading font-semibold">Museu Histórico "Prof. Carlos da Silva Lacaz" da Faculdade de Medicina da Universidade de São Paulo</p>
+      <p class="text-white font-normal">Centro de Pesquisa e Documentação (CPDoc) | Av. Dr. Arnaldo, 455 — 4º andar — Sala 4306, Cerqueira César, São Paulo — SP, CEP 01246-903</p>
+      <p class="text-[11px] text-white font-medium">Contatos: (11) 3061-7249 | cpdoc.museufm@usp.br</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT COMPLETO -->
+  <script>
+    const MAX_FILE_BYTES = 10485760; // 10 MB (arquivo escolhido, antes de reduzir)
+    const MAX_TOTAL_BYTES = 3145728; // 3 MB somados: a Vercel recusa requisições acima de ~4,5 MB (base64 aumenta ~33%)
+    const SESSAO_KEY = 'cpdoc_sessao_v1';
+    const STORAGE_KEY = 'cpdoc_acesso_rascunho_v1';
+    const SPIN = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>';
+
+    let currentStep = 1, enviando = false, envio = null, pdfDoc = null, sessaoOtp = null;
+
+    const $ = id => document.getElementById(id);
+    const val = id => ($(id)?.value || '').trim();
+
+    function getEtapasAtivas() {
+      const mod = val('modalidadeAtendimento');
+      const etapas = [1, 2, 3];
+      if (mod.includes('Presencial') || mod === 'Ambas') etapas.push(4);
+      if (mod.includes('Remoto') || mod === 'Ambas') etapas.push(5);
+      etapas.push(6);
+      return etapas;
+    }
+
+    $('accessForm').addEventListener('submit', e => e.preventDefault());
+
+    /* ---------- Persistência Automática ---------- */
+    const ehCampoDeAceite = el => el.id === 'cpfRetorno' || el.id === 'codigoRetorno' || el.classList.contains('check-aceite') || el.id === 'checkDireitosTerceiros' || el.id === 'checkCienciaCusto';
+
+    function salvarRascunho() {
+      try {
+        const dados = {};
+        document.querySelectorAll('#accessForm input, #accessForm select, #accessForm textarea').forEach(el => {
+          if (el.type === 'file') return;
+          if (ehCampoDeAceite(el)) return;
+          if (el.type === 'checkbox') {
+            dados[el.name ? `${el.name}_${el.value}` : el.id] = el.checked;
+          } else {
+            dados[el.id] = el.value;
+          }
+        });
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+      } catch (e) {}
+    }
+
+    function restaurarRascunho() {
+      try {
+        const salvo = sessionStorage.getItem(STORAGE_KEY);
+        if (!salvo) return;
+        const dados = JSON.parse(salvo);
+
+        document.querySelectorAll('#accessForm input, #accessForm select, #accessForm textarea').forEach(el => {
+          if (el.type === 'file') return;
+          if (ehCampoDeAceite(el)) return;
+          if (el.type === 'checkbox') {
+            const k = el.name ? `${el.name}_${el.value}` : el.id;
+            if (dados[k] !== undefined) el.checked = dados[k];
+          } else if (dados[el.id] !== undefined) {
+            el.value = dados[el.id];
+          }
+        });
+
+        alternarMascaraDocumento();
+        aoMudarVinculo();
+        aoMudarNatureza();
+        aoMudarCEP();
+        aoMudarModalidade();
+        verificarAvisoVolume();
+        atualizarContadorProjeto();
+        verificarAceites();
+        updateProgress();
+      } catch (e) {}
+    }
+
+    function descartarRascunho() {
+      if (!confirm('Deseja apagar todos os dados digitados neste navegador e recomeçar?')) return;
+      limparRascunhoERecarregar();
+    }
+
+    function limparRascunhoERecarregar() {
+      try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      window.location.reload();
+    }
+
+    $('accessForm').addEventListener('input', salvarRascunho);
+    $('accessForm').addEventListener('change', salvarRascunho);
+
+    /* ---------- Interações Dinâmicas ---------- */
+    function alternarMascaraDocumento() {
+      const tipo = val('tipoDocumento');
+      const campo = $('documentoNumero');
+      if (tipo === 'CPF') {
+        campo.placeholder = '000.000.000-00';
+        campo.maxLength = 14;
+      } else {
+        campo.placeholder = 'Nº do Passaporte';
+        campo.maxLength = 20;
+      }
+    }
+
+    function maskDoc(input) {
+      if (val('tipoDocumento') === 'CPF') {
+        let v = input.value.replace(/\D/g, '').slice(0, 11);
+        v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        input.value = v;
+      }
+    }
+
+    function maskTelefone(input) {
+      let v = input.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length > 10) v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+      else if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d{1,4})$/, '$1-$2');
+      input.value = v;
+    }
+
+    function aoMudarVinculo() {
+      const v = val('vinculoInstitucional');
+      const opcional = $('labelVinculoOpcional');
+      const ehSemVinculo = v === 'Pessoa física sem vínculo acadêmico' || v === 'Pesquisador externo independente';
+      opcional.textContent = ehSemVinculo ? '(Não obrigatório)' : '(Obrigatório)';
+    }
+
+    function aoMudarNatureza() {
+      const n = val('naturezaFinalidade');
+      $('boxOutraFinalidade').classList.toggle('hidden', n !== 'Outra (especificar)');
+    }
+
+    function atualizarContadorProjeto() {
+      const len = val('descricaoProjeto').length;
+      const lbl = $('charCountProjeto');
+      lbl.textContent = `${len} / 100 caracteres mínimos`;
+      lbl.classList.toggle('text-red-600', len < 100);
+      lbl.classList.toggle('text-emerald-700', len >= 100);
+    }
+
+    function aoMudarCEP() {
+      $('boxUploadCEP').classList.toggle('hidden', val('aprovacaoCEP') !== 'Sim');
+    }
+
+    function aoMudarModalidade() {
+      updateProgress();
+    }
+
+    function verificarAvisoVolume() {
+      const q = parseInt(val('quantidadeItens') || '1', 10);
+      $('boxAlertaVolume').classList.toggle('hidden', q <= 15);
+    }
+
+    function aoMudarUsoComercial(marcado) {
+      $('boxAlertaComercial').classList.toggle('hidden', !marcado);
+    }
+
+    function copiarCredito() {
+      const txt = $('textoCreditoPadrao').textContent.trim();
+      navigator.clipboard.writeText(txt).then(() => {
+        alert('Forma de citação institucional copiada para a área de transferência!');
+      });
+    }
+
+    /* ---------- Otimização de Anexos ---------- */
+    function lerBase64(file) {
+      return new Promise((ok, erro) => {
+        const r = new FileReader();
+        r.onload = () => ok(r.result.split(',')[1]);
+        r.onerror = () => erro(new Error(`Não foi possível ler o arquivo "${file.name}".`));
+        r.readAsDataURL(file);
+      });
+    }
+
+    async function comprimirImagem(file) {
+      const bmp = await createImageBitmap(file);
+      const escala = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(bmp.width * escala);
+      cv.height = Math.round(bmp.height * escala);
+      const ctx = cv.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
+      const blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', 0.82));
+      if (!blob || blob.size >= file.size) return null;
+      return {
+        filename: file.name.replace(/\.[^.]+$/, '') + '.jpg',
+        size: blob.size,
+        type: 'image/jpeg',
+        base64: await lerBase64(blob)
+      };
+    }
+
+    async function processarArquivo(file) {
+      if (!file) return null;
+      if (file.size > MAX_FILE_BYTES) {
+        throw new Error(`O arquivo "${file.name}" tem ${(file.size / 1048576).toFixed(1)} MB. O limite máximo é de 10 MB.`);
+      }
+      if (file.type.startsWith('image/') && file.size > 400 * 1024) {
+        try { const c = await comprimirImagem(file); if (c) return c; } catch (e) { /* segue com o original */ }
+      }
+      return { filename: file.name, size: file.size, type: file.type, base64: await lerBase64(file) };
+    }
+
+    /* ---------- Cadastro prévio: CPF + código por e-mail ---------- */
+    function cpfValido(cpf) {
+      const c = String(cpf || '').replace(/\D/g, '');
+      if (c.length !== 11 || /^(\d)\1{10}$/.test(c)) return false;
+      for (let t = 9; t < 11; t++) {
+        let soma = 0;
+        for (let i = 0; i < t; i++) soma += Number(c[i]) * (t + 1 - i);
+        if (((soma * 10) % 11) % 10 !== Number(c[t])) return false;
+      }
+      return true;
+    }
+
+    function maskCpfRetorno(input) {
+      let v = input.value.replace(/\D/g, '').slice(0, 11);
+      v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      input.value = v;
+    }
+
+    function msgRetorno(texto, erro) {
+      const el = $('retornoMsg');
+      el.textContent = texto;
+      el.className = 'text-xs ' + (erro ? 'text-red-700' : 'text-emerald-800');
+    }
+
+    async function chamarApi(rota, corpo) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 25000);
+      try {
+        const r = await fetch('/api/' + rota, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(corpo), signal: ctrl.signal
+        });
+        return { ok: r.ok, status: r.status, d: await r.json().catch(() => ({})) };
+      } catch (e) {
+        return { ok: false, status: 0, d: { error: e.name === 'AbortError' ? 'Tempo limite esgotado. Tente novamente.' : 'Sem conexão com o servidor.' } };
+      } finally { clearTimeout(timer); }
+    }
+
+    async function solicitarCodigo() {
+      const cpf = $('cpfRetorno').value.replace(/\D/g, '');
+      if (cpf.length !== 11) return msgRetorno('Informe o CPF completo (11 dígitos).', true);
+      const btn = $('btnEnviarCodigo'), rotulo = btn.innerHTML;
+      btn.disabled = true; btn.innerHTML = SPIN + ' Enviando...';
+      const { ok, d } = await chamarApi('solicitar-otp', { cpf });
+      btn.disabled = false; btn.innerHTML = rotulo;
+      if (!ok) return msgRetorno(d.error || 'Não foi possível enviar o código agora.', true);
+      if (!d.localizado) {
+        $('retornoCodigoWrap').classList.add('hidden');
+        return msgRetorno('Não encontramos cadastro com este CPF. Preencha os dados abaixo e anexe o documento de identificação normalmente.', true);
+      }
+      $('retornoCodigoWrap').classList.remove('hidden');
+      msgRetorno(`Enviamos um código de 6 dígitos para ${d.emailMascarado}. Ele vale por 10 minutos.`);
+      $('codigoRetorno').focus();
+    }
+
+    async function confirmarCodigo() {
+      const cpf = $('cpfRetorno').value.replace(/\D/g, '');
+      const codigo = $('codigoRetorno').value.replace(/\D/g, '');
+      if (codigo.length !== 6) return msgRetorno('Digite o código de 6 dígitos recebido por e-mail.', true);
+      const btn = $('btnConfirmarCodigo'), rotulo = btn.innerHTML;
+      btn.disabled = true; btn.innerHTML = SPIN + ' Verificando...';
+      const { ok, d } = await chamarApi('validar-otp', { cpf, codigo });
+      btn.disabled = false; btn.innerHTML = rotulo;
+      if (!ok || !d.autenticado) return msgRetorno(d.error || 'Código inválido.', true);
+      sessaoOtp = { token: d.sessao, exp: d.expiraEm, cpf, dados: d.pesquisador, validadoEm: d.pesquisador.timestampValidacao };
+      try { sessionStorage.setItem(SESSAO_KEY, JSON.stringify(sessaoOtp)); } catch (e) {}
+      aplicarIdentificacao();
+    }
+
+    const CAMPOS_TRAVADOS = ['nomeSolicitante', 'documentoNumero', 'instituicaoVinculo', 'emailSolicitante'];
+    const SELECTS_TRAVADOS = ['tipoDocumento', 'vinculoInstitucional'];
+
+    function aplicarIdentificacao() {
+      const p = sessaoOtp.dados;
+      $('nomeSolicitante').value = p.nome || '';
+      $('tipoDocumento').value = 'CPF'; alternarMascaraDocumento();
+      $('documentoNumero').value = sessaoOtp.cpf; maskDoc($('documentoNumero'));
+      if (p.vinculo) $('vinculoInstitucional').value = p.vinculo;
+      aoMudarVinculo();
+      $('instituicaoVinculo').value = p.instituicao || '';
+      $('emailSolicitante').value = p.email || '';
+      if (!val('telefoneSolicitante')) $('telefoneSolicitante').value = p.telefone || '';
+
+      CAMPOS_TRAVADOS.forEach(id => { $(id).readOnly = true; $(id).classList.add('bg-gray-100'); });
+      SELECTS_TRAVADOS.forEach(id => { $(id).disabled = true; $(id).classList.add('bg-gray-100'); });
+      $('boxRetorno').classList.add('hidden');
+      $('boxIdentificado').classList.remove('hidden');
+      $('boxUploadsIdent').classList.add('hidden');
+      salvarRascunho();
+      try { updateProgress(); } catch (e) {}
+    }
+
+    function desfazerIdentificacao(limpar) {
+      sessaoOtp = null;
+      try { sessionStorage.removeItem(SESSAO_KEY); } catch (e) {}
+      CAMPOS_TRAVADOS.forEach(id => { $(id).readOnly = false; $(id).classList.remove('bg-gray-100'); });
+      SELECTS_TRAVADOS.forEach(id => { $(id).disabled = false; $(id).classList.remove('bg-gray-100'); });
+      if (limpar) {
+        ['nomeSolicitante', 'documentoNumero', 'instituicaoVinculo', 'emailSolicitante', 'telefoneSolicitante'].forEach(id => { $(id).value = ''; });
+      }
+      $('boxRetorno').classList.remove('hidden');
+      $('boxIdentificado').classList.add('hidden');
+      $('boxUploadsIdent').classList.remove('hidden');
+      $('retornoCodigoWrap').classList.add('hidden');
+      $('codigoRetorno').value = '';
+      $('retornoMsg').classList.add('hidden');
+      salvarRascunho();
+    }
+
+    function restaurarSessao() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem(SESSAO_KEY) || 'null');
+        if (s && s.token && Date.now() < s.exp) { sessaoOtp = s; aplicarIdentificacao(); }
+        else sessionStorage.removeItem(SESSAO_KEY);
+      } catch (e) {}
+    }
+
+    /* ---------- Validação Etapa a Etapa ---------- */
+    function validarEtapa(step) {
+      if (step === 1) {
+        if (!val('nomeSolicitante')) return ['nomeSolicitante', 'Informe seu nome completo.'];
+        const doc = val('documentoNumero');
+        if (!doc) return ['documentoNumero', 'Informe seu CPF ou Passaporte.'];
+        if (val('tipoDocumento') === 'CPF' && doc.replace(/\D/g, '').length !== 11) {
+          return ['documentoNumero', 'CPF incompleto.'];
+        }
+        if (val('tipoDocumento') === 'CPF' && !cpfValido(doc)) {
+          return ['documentoNumero', 'CPF inválido. Confira os números digitados.'];
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('emailSolicitante'))) return ['emailSolicitante', 'E-mail inválido.'];
+        if (val('telefoneSolicitante').replace(/\D/g, '').length < 10) return ['telefoneSolicitante', 'Telefone com DDD incompleto.'];
+        if (!sessaoOtp && !$('uploadDocIdentidade').files.length) return ['uploadDocIdentidade', 'Anexe o documento de identificação com foto.'];
+
+        const v = val('vinculoInstitucional');
+        const precisaComprovante = v !== 'Pessoa física sem vínculo acadêmico' && v !== 'Pesquisador externo independente';
+        if (precisaComprovante && !sessaoOtp && !$('uploadComprovanteVinculo').files.length) {
+          return ['uploadComprovanteVinculo', 'Anexe o comprovante de vínculo acadêmico ou funcional.'];
+        }
+      }
+
+      if (step === 2) {
+        if (val('naturezaFinalidade') === 'Outra (especificar)' && !val('outraFinalidadeTexto')) {
+          return ['outraFinalidadeTexto', 'Especifique a natureza da finalidade pretendida.'];
+        }
+        if (val('descricaoProjeto').length < 100) {
+          return ['descricaoProjeto', 'A descrição do projeto deve conter no mínimo 100 caracteres.'];
+        }
+        if (val('aprovacaoCEP') === 'Sim' && !$('uploadParecerCEP').files.length) {
+          return ['uploadParecerCEP', 'Anexe o parecer consubstanciado do CEP/CONEP.'];
+        }
+      }
+
+      if (step === 3) {
+        if (!val('codigosReferencia')) return ['codigosReferencia', 'Informe o(s) código(s) de referência do(s) item(ns).'];
+        if (parseInt(val('quantidadeItens') || '0', 10) < 1) return ['quantidadeItens', 'Informe uma quantidade válida de itens.'];
+        if (!val('descricaoItens')) return ['descricaoItens', 'Preencha a descrição detalhada dos itens.'];
+      }
+
+      if (step === 4) {
+        if (!val('dataVisita1')) return ['dataVisita1', 'Informe a primeira opção de data para visita presencial.'];
+      }
+
+      if (step === 5) {
+        if (!$('checkCienciaCusto').checked) {
+          return ['checkCienciaCusto', 'Confirme a declaração de ciência de prazo e ressarcimento de custos do atendimento remoto.'];
+        }
+      }
+
+      return null;
+    }
+
+    /* ---------- Navegação do Fluxo ---------- */
+    function updateProgress() {
+      const etapas = getEtapasAtivas();
+      const total = etapas.length;
+      const indiceAtual = etapas.indexOf(currentStep) + 1;
+
+      $('stepProgressBar').style.width = `${(indiceAtual / total) * 100}%`;
+      $('stepIndicatorLabel').textContent = `Etapa ${indiceAtual} de ${total}`;
+
+      const badgeFinal = $('stepFinalBadge');
+      if (badgeFinal) badgeFinal.textContent = total;
+
+      document.querySelectorAll('.step-pane').forEach((el) => {
+        const id = el.id;
+        const stepNum = id === 'stepFinal' ? 6 : parseInt(id.replace('step', ''), 10);
+        el.classList.toggle('hidden', stepNum !== currentStep);
+      });
+
+      $('btnPrev').classList.toggle('hidden', indiceAtual === 1);
+      $('btnNext').classList.toggle('hidden', indiceAtual === total);
+      $('btnSubmit').classList.toggle('hidden', indiceAtual !== total);
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function nextStep() {
+      const e = validarEtapa(currentStep);
+      if (e) { alert(e[1]); $(e[0])?.focus(); return; }
+
+      const etapas = getEtapasAtivas();
+      const idx = etapas.indexOf(currentStep);
+      if (idx < etapas.length - 1) {
+        currentStep = etapas[idx + 1];
+        updateProgress();
+      }
+    }
+
+    function prevStep() {
+      $('submitError').classList.add('hidden');
+      const etapas = getEtapasAtivas();
+      const idx = etapas.indexOf(currentStep);
+      if (idx > 0) {
+        currentStep = etapas[idx - 1];
+        updateProgress();
+      }
+    }
+
+    function verificarAceites() {
+      const checks = Array.from(document.querySelectorAll('.check-aceite'));
+      const todosAssinados = checks.every(c => c.checked) && $('checkDireitosTerceiros').checked;
+      const temUsoPretendido = Array.from(document.querySelectorAll('input[name="usoPretendido"]:checked')).length > 0;
+
+      const ok = todosAssinados && temUsoPretendido;
+      const btn = $('btnSubmit');
+      btn.disabled = !ok;
+      btn.classList.toggle('bg-gray-400', !ok);
+      btn.classList.toggle('cursor-not-allowed', !ok);
+      btn.classList.toggle('bg-[#006747]', ok);
+      btn.classList.toggle('hover:bg-[#005037]', ok);
+    }
+
+    document.querySelectorAll('input[name="usoPretendido"], #checkDireitosTerceiros').forEach(el => {
+      el.addEventListener('change', verificarAceites);
+    });
+
+    /* ---------- Criptografia e Metadados ---------- */
+    async function sha256(texto) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function gerarProtocolo(data = new Date()) {
+      const ano = data.getFullYear();
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const hora = String(data.getHours()).padStart(2, '0') +
+                   String(data.getMinutes()).padStart(2, '0') +
+                   String(data.getSeconds()).padStart(2, '0');
+      const alfabeto = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const r = crypto.getRandomValues(new Uint8Array(6));
+      const aleatorio = Array.from(r).map(b => alfabeto[b % alfabeto.length]).join('');
+      return `MHFMUSP-${ano}-${mes}-CPDoc-ACC-${hora}-${aleatorio}`;
+    }
+
+    function coletarResumo() {
+      const usos = Array.from(document.querySelectorAll('input[name="usoPretendido"]:checked')).map(c => c.value).join('; ');
+      const r = [
+        ['Nome Completo', val('nomeSolicitante')],
+        ['Documento (' + val('tipoDocumento') + ')', val('documentoNumero')],
+        ['Vínculo Institucional', val('vinculoInstitucional')],
+        ['Instituição de Vínculo', val('instituicaoVinculo') || 'Não se aplica'],
+        ['E-mail de Contato', val('emailSolicitante')],
+        ['Telefone / WhatsApp', val('telefoneSolicitante')],
+        ['Identificação', sessaoOtp
+          ? 'Cadastro prévio reconhecido; titularidade do CPF confirmada por código enviado ao e-mail cadastrado em ' + new Date(sessaoOtp.validadoEm).toLocaleString('pt-BR')
+          : 'Documento de identificação anexado a esta solicitação'],
+        ['Natureza da Finalidade', val('naturezaFinalidade') === 'Outra (especificar)' ? `Outra: ${val('outraFinalidadeTexto')}` : val('naturezaFinalidade')],
+        ['Descrição do Projeto', val('descricaoProjeto')],
+        ['Órgão de Fomento', val('orgaoFomento') || 'Nenhum'],
+        ['Aprovação em CEP/CONEP', val('aprovacaoCEP')],
+        ['Previsão de Publicação', val('previsaoPublicacao')],
+        ['Modalidade de Atendimento', val('modalidadeAtendimento')],
+        ['Código(s) de Referência', val('codigosReferencia')],
+        ['Quantidade de Itens', val('quantidadeItens')],
+        ['Descrição dos Itens', val('descricaoItens')]
+      ];
+
+      const mod = val('modalidadeAtendimento');
+      if (mod.includes('Presencial') || mod === 'Ambas') {
+        r.push(
+          ['Datas Pretendidas (Presencial)', `1ª: ${val('dataVisita1')} | 2ª: ${val('dataVisita2') || '-'} | 3ª: ${val('dataVisita3') || '-'}`],
+          ['Turno Preferencial', val('turnoVisita')],
+          ['Duração Estimada', val('duracaoVisita')],
+          ['Acompanhante', val('nomeAcompanhante') || 'Nenhum'],
+          ['Equipamento Especial', val('equipamentoEspecial') || 'Nenhum']
+        );
+      }
+
+      if (mod.includes('Remoto') || mod === 'Ambas') {
+        r.push(
+          ['Tipo de Reprodução', val('tipoReproducao')],
+          ['Resolução / Formato', val('resolucaoDesejada')],
+          ['Forma de Entrega', val('formaEntrega')]
+        );
+      }
+
+      r.push(
+        ['Uso Pretendido Declarado', usos],
+        ['Crédito Institucional', $('textoCreditoPadrao').textContent.trim()]
+      );
+
+      return r.map(([rotulo, valor]) => ({ rotulo, valor: String(valor).trim() }));
+    }
+
+    /* ---------- Elementos Visuais do PDF ---------- */
+    function gerarCabecalhoPDFCanvas(logoEl) {
+      const w = 1260, h = 180;
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+
+      ctx.fillStyle = '#006747';
+      ctx.fillRect(0, 0, w, h);
+
+      const gCentral = ctx.createRadialGradient(w * 0.45, h * 0.45, 10, w * 0.45, h * 0.45, w * 0.85);
+      gCentral.addColorStop(0, 'rgba(0, 103, 71, 0.85)');
+      gCentral.addColorStop(1, 'rgba(2, 43, 30, 0.98)');
+      ctx.fillStyle = gCentral;
+      ctx.fillRect(0, 0, w, h);
+
+      const gTeal = ctx.createRadialGradient(w * 0.20, h * 0.80, 5, w * 0.20, h * 0.80, w * 0.55);
+      gTeal.addColorStop(0, 'rgba(0, 156, 166, 0.50)');
+      gTeal.addColorStop(1, 'rgba(0, 156, 166, 0)');
+      ctx.fillStyle = gTeal;
+      ctx.fillRect(0, 0, w, h);
+
+      const gBright = ctx.createRadialGradient(w * 0.75, h * 0.25, 5, w * 0.75, h * 0.25, w * 0.50);
+      gBright.addColorStop(0, 'rgba(0, 199, 177, 0.45)');
+      gBright.addColorStop(1, 'rgba(0, 199, 177, 0)');
+      ctx.fillStyle = gBright;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = '#00C7B1';
+      ctx.fillRect(0, h - 5, w, 5);
+
+      const logoSize = 135;
+      const logoX = 42;
+      const logoY = Math.round((h - 5 - logoSize) / 2);
+
+      if (logoEl && logoEl.complete && logoEl.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(logoEl, logoX, logoY, logoSize, logoSize);
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 - 1.5, 0, Math.PI * 2);
+        ctx.strokeStyle = '#c8a248';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      const tx = logoX + logoSize + 32;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.textBaseline = 'alphabetic';
+
+      ctx.font = '500 17px Inter, sans-serif';
+      ctx.fillText('Faculdade de Medicina da Universidade de São Paulo', tx, 44);
+
+      ctx.font = '700 25px Cinzel, serif';
+      ctx.fillText('Museu Histórico "Prof. Carlos da Silva Lacaz"', tx, 78);
+
+      ctx.font = '500 16px Inter, sans-serif';
+      ctx.fillText('Centro de Pesquisa e Documentação - CPDoc', tx, 108);
+
+      ctx.font = '700 22px Cinzel, serif';
+      ctx.fillText('TERMO PARA ACESSO E REPRODUÇÃO DE ACERVO', tx, 146);
+
+      return c.toDataURL('image/jpeg', 0.85);
+    }
+
+    function gerarBannerSecaoCanvas(tituloTexto) {
+      const w = 1000, h = 45;
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+
+      ctx.fillStyle = '#006747';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = '#00C7B1';
+      ctx.fillRect(0, h - 4, w, 4);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '700 18px Cinzel, serif';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(tituloTexto.toUpperCase(), 16, (h - 4) / 2);
+
+      return c.toDataURL('image/png');
+    }
+
+    function gerarDegradeHorizontalCanvas(tom) {
+      const w = 300, h = 15;
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, 0, w, 0);
+      if (tom === 'A') {
+        grad.addColorStop(0, 'rgba(0, 156, 166, 0.08)');
+        grad.addColorStop(0.4, 'rgba(0, 156, 166, 0.02)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      } else {
+        grad.addColorStop(0, 'rgba(0, 103, 71, 0.055)');
+        grad.addColorStop(0.4, 'rgba(0, 103, 71, 0.015)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      }
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+      return c.toDataURL('image/png');
+    }
+
+    /* ---------- Geração do PDF com Formatação e Recuos ---------- */
+    const L = s => String(s ?? '').replace(/[①-⑨]/g, c => String(c.charCodeAt(0) - 0x2460 + 1))
+                     .replace(/[–—]/g, '-').replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
+                     .replace(/[^\n\x20-\x7E\u00A0-\u00FF]/g, '?');
+
+    /* TERMO-PDF:INICIO — Texto legal no PDF: negritos, itálicos e recuos como no DOCX de referência */
+    // Recuos em mm, a partir da margem: [x do número/primeira linha, x das linhas seguintes]
+    const TERMO_RECUOS = { corpo: [0, 0], parte: [0, 4], n1: [3, 7.5], n2: [6, 12] };
+
+    // Converte um <p> do #textoLegal em { tipo, recuo, runs: [{ t, b, i }] }
+    function termoRuns(p) {
+      const cls = p.className || '';
+      const txt = (p.textContent || '').trim();
+      if (cls.includes('text-center')) return { tipo: 'titulo', recuo: 'corpo', runs: [{ t: txt, b: true }] };
+      if (cls.includes('font-bold')) return { tipo: 'secao', recuo: 'corpo', runs: [{ t: txt, b: true }] };
+
+      const recuo = cls.includes('pl-8') ? 'n2' : (cls.includes('pl-4') ? 'n1' : 'corpo');
+      if (cls.includes('font-semibold')) {
+        // "4.1. Agendamento": número em negrito, título em negrito e itálico
+        const m = txt.match(/^(\d+\.\d+\.)\s+(.*)$/);
+        return { tipo: 'subtitulo', recuo, runs: m ? [{ t: m[1], b: true }, { t: ' ' }, { t: m[2], b: true, i: true }] : [{ t: txt, b: true, i: true }] };
+      }
+
+      const ehParte = recuo === 'n1' && /^\([ab]\)/.test(txt);
+      const base = [];
+      (p.childNodes ? Array.from(p.childNodes) : []).forEach(n => {
+        const t = n.textContent || '';
+        if (t) base.push({ t, b: n.nodeName === 'STRONG' });
+      });
+
+      const runs = [];
+      let inicio = true;
+      base.forEach(seg => {
+        if (seg.b) { runs.push(seg); inicio = false; return; }
+        let resto = seg.t;
+        if (inicio) {
+          // número do item ("2.3.", "4.1.1.") ou letra da alínea "(a)": só isso em negrito
+          const m = resto.match(/^(\d+(?:\.\d+)+\.|\([a-z]\))(\s*)/);
+          if (m) { runs.push({ t: m[1], b: true }); if (m[2]) runs.push({ t: m[2] }); resto = resto.slice(m[0].length); }
+        }
+        inicio = false;
+        // letras das alíneas dentro do texto e, nas partes, os termos definidos
+        const quebra = ehParte ? /(\([a-d]\)|“(?:Solicitante|Museu)”)/ : /(\([a-d]\))/;
+        resto.split(quebra).forEach(parte => {
+          if (!parte) return;
+          if (/^\([a-d]\)$/.test(parte)) runs.push({ t: parte, b: true });
+          else if (/^“(Solicitante|Museu)”$/.test(parte)) runs.push({ t: '“' }, { t: parte.slice(1, -1), b: true }, { t: '”' });
+          else runs.push({ t: parte });
+        });
+      });
+      return { tipo: 'texto', recuo: ehParte ? 'parte' : recuo, runs };
+    }
+
+    const termoEstilo = r => (r.b ? (r.i ? 'bolditalic' : 'bold') : (r.i ? 'italic' : 'normal'));
+
+    // Quebra de linhas com estilos misturados. Primeira linha começa em xNum; as seguintes em xTexto (recuo deslocado).
+    function termoQuebrar(runs, medir, xNum, xTexto, xMax) {
+      const unidades = [];
+      let atual = null;
+      runs.forEach(r => {
+        String(r.t).split(/(\s+)/).forEach(parte => {
+          if (parte === '') return;
+          if (/^\s+$/.test(parte)) {
+            atual = null;
+            unidades.push({ espaco: true, pecas: [{ t: ' ', b: r.b, i: r.i }] });
+          } else {
+            if (!atual) { atual = { espaco: false, pecas: [] }; unidades.push(atual); }
+            atual.pecas.push({ t: parte, b: r.b, i: r.i });
+          }
+        });
+      });
+      const largura = u => u.pecas.reduce((s, pc) => s + medir(pc.t, termoEstilo(pc)), 0);
+      const linhas = [];
+      let linha = [], x = xNum;
+      const aparar = l => { while (l.length && l[l.length - 1].u.espaco) l.pop(); return l; };
+      unidades.forEach(u => {
+        const w = largura(u);
+        if (u.espaco) { if (linha.length) { linha.push({ u, w }); x += w; } return; }
+        if (linha.length && x + w > xMax + 0.01) {
+          linhas.push(aparar(linha));
+          linha = []; x = xTexto;
+        }
+        linha.push({ u, w }); x += w;
+      });
+      if (aparar(linha).length) linhas.push(linha);
+      return linhas;
+    }
+    /* TERMO-PDF:FIM */
+
+    function gerarPDF({ protocolo, timestamp, hashTermo, hashDossie, resumo, manifesto }) {
+      const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', compress: true });
+      const M = 14, CW = 182, FIM = 275;
+      const LW = 72, VX = 90, VW = CW - (VX - M);
+      let y = 44;
+
+      const logoImg = document.querySelector('header img');
+      const headerTextureUrl = gerarCabecalhoPDFCanvas(logoImg);
+      const linhaDegradeUrlA = gerarDegradeHorizontalCanvas('A');
+      const linhaDegradeUrlB = gerarDegradeHorizontalCanvas('B');
+
+      const cabecalho = () => {
+        doc.addImage(headerTextureUrl, 'JPEG', 0, 0, 210, 30);
+      };
+
+      const garantir = h => {
+        if (y + h <= FIM) return;
+        const tam = doc.getFontSize();
+        doc.addPage();
+        cabecalho();
+        y = 38;
+        doc.setFontSize(tam);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'normal');
+      };
+
+      const bannerSecao = tituloTexto => {
+        garantir(20);
+        const bannerUrl = gerarBannerSecaoCanvas(tituloTexto);
+        doc.addImage(bannerUrl, 'PNG', M, y, CW, 8);
+        y += 10;
+      };
+
+      const campo = (r, v, index = 0) => {
+        const vClean = String(v ?? '').trim().replace(/([^\n])\r?\n([^\n])/g, '$1 $2');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        const rLines = doc.splitTextToSize(L(r), LW - 2);
+
+        doc.setFont('helvetica', 'normal');
+        const vLines = doc.splitTextToSize(L(vClean), VW - 3);
+
+        const numLinhas = Math.max(rLines.length, vLines.length);
+        const rowH = Math.max(6, numLinhas * 3.8 + 2.4);
+
+        garantir(rowH);
+        const degradeUrl = (index % 2 === 0) ? linhaDegradeUrlA : linhaDegradeUrlB;
+        doc.addImage(degradeUrl, 'PNG', M, y, CW, rowH);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 80, 55);
+        rLines.forEach((l, i) => doc.text(l, M + 3, y + 3.4 + i * 3.8));
+
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(25, 25, 25);
+        vLines.forEach((l, i) => doc.text(l, VX, y + 3.4 + i * 3.8));
+
+        y += rowH;
+      };
+
+      cabecalho();
+
+      // Protocolo e Emissão
+      doc.setFillColor(242, 248, 246);
+      doc.roundedRect(M, 33, CW, 7, 1, 1, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(0, 103, 71);
+      doc.text(`PROTOCOLO: ${protocolo}`, M + 2.5, 37.6);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(80, 80, 80);
+      doc.text(L(`Emissão: ${timestamp}`), M + CW - 2.5, 37.6, { align: 'right' });
+
+      y = 44;
+
+      bannerSecao('1. Dados do Solicitante e do Pedido de Acesso');
+      resumo.forEach((item, idx) => campo(item.rotulo, item.valor, idx));
+
+      garantir(25);
+      bannerSecao('2. Documentos e Arquivos Anexados (SHA-256)');
+      manifesto.forEach((m, idx) => {
+        garantir(6.5);
+        const bgUrl = (idx % 2 === 0) ? linhaDegradeUrlA : linhaDegradeUrlB;
+        doc.addImage(bgUrl, 'PNG', M, y, CW, 6);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(0, 80, 55);
+        doc.text(L(m.filename), M + 3, y + 4);
+        doc.setFont('courier', 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(60, 60, 60);
+        doc.text(m.hash, VX, y + 4);
+        y += 6.5;
+      });
+
+      garantir(32);
+      bannerSecao('3. Declarações e Aceite Eletrônico');
+      document.querySelectorAll('.check-aceite').forEach(c => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(0, 103, 71);
+        const lns = doc.splitTextToSize(L(c.nextElementSibling.textContent.trim()), CW - 12);
+        garantir(lns.length * 3.5 + 2);
+        doc.text('[X]', M + 2, y + 3.2);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(30, 30, 30);
+        lns.forEach((l, i) => doc.text(l, M + 9, y + 3.2 + i * 3.5));
+        y += lns.length * 3.5 + 2;
+      });
+
+      garantir(45);
+      bannerSecao('4. Texto Legal do Instrumento');
+      const medirTermo = (t, st) => { doc.setFont('helvetica', st); return doc.getTextWidth(t); };
+      document.querySelectorAll('#textoLegal p').forEach((p, idx) => {
+        const item = termoRuns(p);
+        const runs = item.runs.map(r => ({ ...r, t: L(r.t) }));
+        const [dNum, dTxt] = TERMO_RECUOS[item.recuo];
+        const LH = 3.1;
+
+        doc.setFontSize(6.5);
+        if (item.tipo === 'secao' && idx > 0) y += 1.2;   // respiro antes de cada cláusula, como no DOCX
+
+        let linhas;
+        if (item.tipo === 'titulo') {
+          linhas = [null];
+        } else {
+          linhas = termoQuebrar(runs, medirTermo, M + dNum, M + dTxt, M + CW);
+        }
+        garantir(linhas.length * LH + 1.5);
+        doc.setFontSize(6.5);
+        doc.setTextColor(40, 40, 40);
+
+        if (item.tipo === 'titulo') {
+          doc.setFont('helvetica', 'bold');
+          doc.text(runs[0].t, M + CW / 2, y + 2.8, { align: 'center' });
+        } else {
+          linhas.forEach((ln, k) => {
+            let x = k === 0 ? M + dNum : M + dTxt;
+            ln.forEach(({ u }) => u.pecas.forEach(pc => {
+              doc.setFont('helvetica', termoEstilo(pc));
+              doc.text(pc.t, x, y + 2.8 + k * LH);
+              x += doc.getTextWidth(pc.t);
+            }));
+          });
+        }
+        y += linhas.length * LH + (item.tipo === 'titulo' || item.tipo === 'secao' ? 1.8 : 1.2);
+      });
+
+      garantir(55);
+      bannerSecao('5. Certificado de Assinatura Eletrônica');
+      campo('Assinado eletronicamente por', val('nomeSolicitante'), 0);
+      campo('Data e hora da emissão', timestamp, 1);
+      campo('Destino oficial', 'cpdoc.museufm@usp.br', 2);
+      campo('Hash SHA-256 do Termo aceito', hashTermo, 3);
+      campo('Hash SHA-256 do dossiê de envio', hashDossie, 4);
+      y += 2;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.5);
+      doc.setTextColor(60, 60, 60);
+      const disclaimer = 'Aceite eletrônico registrado nos termos do art. 10, § 2º, da Medida Provisória nº 2.200-2/2001 e do art. 5º, inciso I, da Lei nº 14.063/2020. O hash do Termo identifica a versão integral do instrumento legal aceito e o hash do dossiê garante a integridade dos dados declarados e dos anexos submetidos. A deliberação final cabe exclusivamente à Coordenação do Museu Histórico "Prof. Carlos da Silva Lacaz" da FMUSP (Processo SEI-USP).';
+      doc.splitTextToSize(L(disclaimer), CW).forEach(l => {
+        garantir(3.2);
+        doc.text(l, M, y + 3);
+        y += 3.2;
+      });
+
+      const n = doc.getNumberOfPages();
+      for (let p = 1; p <= n; p++) {
+        doc.setPage(p);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(110, 110, 110);
+        doc.text(`${protocolo} — Página ${p} de ${n}`, 105, 290, { align: 'center' });
+      }
+
+      return doc;
+    }
+
+    /* ---------- Preparação e Envio da Solicitação ---------- */
+    async function prepararEnvio() {
+      const dataEnvio = new Date();
+      const protocolo = gerarProtocolo(dataEnvio);
+      const timestamp = dataEnvio.toLocaleString('pt-BR', { timeZoneName: 'short' });
+
+      const anexos = [];
+      const ident = sessaoOtp ? null : await processarArquivo($('uploadDocIdentidade').files[0]);
+      if (ident) anexos.push({ ...ident, filename: 'Identificacao_' + ident.filename });
+
+      const comp = sessaoOtp ? null : await processarArquivo($('uploadComprovanteVinculo').files[0]);
+      if (comp) anexos.push({ ...comp, filename: 'Vinculo_' + comp.filename });
+
+      const cep = await processarArquivo($('uploadParecerCEP').files[0]);
+      if (cep) anexos.push({ ...cep, filename: 'Parecer_CEP_' + cep.filename });
+
+      const acomp = await processarArquivo($('uploadDocAcompanhante').files[0]);
+      if (acomp) anexos.push({ ...acomp, filename: 'Acompanhante_' + acomp.filename });
+
+      const totalBytes = anexos.reduce((s, a) => s + a.size, 0);
+      if (totalBytes > MAX_TOTAL_BYTES) {
+        throw new Error(`Os anexos somam ${(totalBytes / 1048576).toFixed(1)} MB e o limite para envio é ${(MAX_TOTAL_BYTES / 1048576).toFixed(0)} MB. Volte à Etapa 1 (ou 2) e reduza os arquivos: prefira foto (JPG/PNG) a PDF escaneado em alta resolução.`);
+      }
+
+      const manifesto = [];
+      for (const a of anexos) {
+        manifesto.push({ filename: a.filename, hash: await sha256(a.base64) });
+      }
+
+      const resumo = coletarResumo();
+
+      const textoLegalCompleto = $('textoLegal').innerText.replace(/\s+/g, ' ').trim();
+      const hashTermo = await sha256(textoLegalCompleto);
+      const hashDossie = await sha256(JSON.stringify({ protocolo, timestamp, resumo, manifesto }));
+
+      pdfDoc = gerarPDF({ protocolo, timestamp, hashTermo, hashDossie, resumo, manifesto });
+      const pdfBase64 = pdfDoc.output('datauristring').split(',')[1];
+
+      const lotes = [{ pdfBase64, anexos }];
+      return { protocolo, timestamp, hashTermo, hashDossie, resumo, lotes, enviados: new Set() };
+    }
+
+    async function enviarLote(pacote, i) {
+      const lote = pacote.lotes[i], ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 60000);
+      try {
+        const r = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: ctrl.signal,
+          body: JSON.stringify({
+            tipoFormulario: 'Acesso e Reprodução de Acervo',
+            protocolo: pacote.protocolo,
+            solicitanteNome: val('nomeSolicitante'),
+            solicitanteEmail: val('emailSolicitante'),
+            solicitanteTelefone: val('telefoneSolicitante'),
+            tipoDocumento: val('tipoDocumento'),
+            documentoNumero: val('documentoNumero'),
+            instituicao: val('instituicaoVinculo'),
+            vinculo: val('vinculoInstitucional'),
+            sessao: sessaoOtp ? sessaoOtp.token : undefined,
+            modalidade: val('modalidadeAtendimento'),
+            itens: val('codigosReferencia'),
+            timestamp: pacote.timestamp,
+            hashTermo: pacote.hashTermo,
+            hashDossie: pacote.hashDossie,
+            resumo: i === 0 ? pacote.resumo : undefined,
+            pdfBase64: lote.pdfBase64,
+            anexos: lote.anexos
+          })
+        });
+        if (r.ok) return;
+        const d = await r.json().catch(() => ({}));
+        let msg = 'O serviço institucional não confirmou o recebimento.';
+        if (r.status === 413) msg = 'Os arquivos excedem o limite aceito pelo servidor.';
+        else if ((r.status === 400 || r.status === 401 || r.status === 429) && d.error) msg = d.error;
+        if (r.status === 401 && d.code === 'SESSAO_EXPIRADA') { desfazerIdentificacao(false); envio = null; }
+        else if (r.status === 429 || r.status === 503) msg = 'Servidor ocupado. Aguarde um instante e tente novamente.';
+        throw new Error(`${msg} (código ${r.status}${d.code ? '/' + d.code : ''})`);
+      } catch (e) {
+        if (e.name === 'AbortError') throw new Error('Tempo limite esgotado. Verifique sua conexão e tente novamente.');
+        if (e instanceof TypeError) throw new Error('Sem conexão com o servidor. Verifique sua rede e tente novamente.');
+        throw e;
+      } finally { clearTimeout(timer); }
+    }
+
+    async function finalizarAssinatura() {
+      if (enviando) return;
+      enviando = true;
+      const btn = $('btnSubmit'), box =$('submitError'), rotuloOriginal = btn.innerHTML;
+      box.classList.add('hidden'); btn.disabled = true;
+
+      try {
+        btn.innerHTML = SPIN + ' Gerando certificado e criptografia...';
+        envio = envio || await prepararEnvio();
+
+        for (let i = 0; i < envio.lotes.length; i++) {
+          if (envio.enviados.has(i)) continue;
+          btn.innerHTML = `${SPIN} Transmitindo solicitação...`;
+          await enviarLote(envio, i);
+          envio.enviados.add(i);
+        }
+
+        try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        mostrarSucesso();
+      } catch (err) {
+        box.textContent = `Sua solicitação NÃO foi concluída. ${err.message} Tente novamente; se o problema persistir, entre em contato pelo e-mail cpdoc.museufm@usp.br informando o horário do ocorrido.`;
+        box.classList.remove('hidden');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } finally {
+        enviando = false; btn.innerHTML = rotuloOriginal; btn.disabled = false;
+      }
+    }
+
+    function mostrarSucesso() {
+      $('displayProtocol').textContent = envio.protocolo;
+      $('displayTimestamp').textContent = envio.timestamp;
+      $('displayHashTermo').textContent = envio.hashTermo;
+      $('displayHashDossie').textContent = envio.hashDossie;
+
+      const qr = $('qrcodeDisplay'); qr.innerHTML = '';
+      new QRCode(qr, {
+        text: `MHFMUSP|CPDOC|ACC|${envio.protocolo}|DOSSIE:${envio.hashDossie.slice(0, 16)}`,
+        width: 80,
+        height: 80
+      });
+
+      $('accessForm').classList.add('hidden');$('successPanel').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      baixarPDFNovamente();
+    }
+
+    function baixarPDFNovamente() {
+      if (pdfDoc && envio) {
+        pdfDoc.save(`Termo_Acesso_${envio.protocolo}.pdf`);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      restaurarRascunho();
+      restaurarSessao();
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
