@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 1. Cabeçalhos CORS para permitir requisições do front-end
+  // 1. Cabeçalhos CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -17,20 +17,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Normalização do corpo da requisição (trata objeto direto ou string JSON)
     let body = req.body;
     if (typeof body === 'string') {
       try {
         body = JSON.parse(body);
       } catch (e) {
-        // Mantém como está se a conversão falhar
+        // Mantém como está
       }
     }
 
-    // Suporte a dados diretos ou encapsulados em "dados", "formData" ou "form"
     const data = body?.dados || body?.formData || body?.form || body || {};
 
-    // Extração flexível dos campos para evitar incompatibilidades de nomes
     const nome = (
       data.nome ||
       data.nomeCompleto ||
@@ -72,9 +69,8 @@ export default async function handler(req, res) {
     const validacaoOtpTimestamp = data.validacaoOtpTimestamp || data.validacao_otp_timestamp || '';
     const pdfBase64 = data.pdfBase64 || data.pdf_base64 || data.pdf || data.arquivo_pdf || '';
 
-    // Validação dos dados essenciais
     if (!nome || !email || !cpf) {
-      console.error('Campos obrigatórios em falta. Chaves detetadas no envio:', Object.keys(data));
+      console.error('Campos obrigatórios em falta:', Object.keys(data));
       return res.status(400).json({
         error: 'Dados obrigatórios em falta (nome, e-mail ou CPF).',
         chavesRecebidas: Object.keys(data)
@@ -89,7 +85,6 @@ export default async function handler(req, res) {
 
     const dataEnvioFormatada = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-    // Preparação do anexo PDF em Base64 (se fornecido)
     const attachments = [];
     if (pdfBase64) {
       const base64Limpo = String(pdfBase64).replace(/^data:application\/pdf;base64,/, '').trim();
@@ -101,7 +96,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // Montagem do corpo de e-mail estruturado
     const htmlEmail = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; max-width: 680px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="border-bottom: 2px solid #0b3b60; padding-bottom: 12px; margin-bottom: 20px;">
@@ -147,7 +141,7 @@ export default async function handler(req, res) {
       </div>
     `;
 
-    // Disparo através da API do Brevo com o remetente verificado
+    // Disparo através da API do Brevo
     const respostaBrevo = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -158,11 +152,11 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         sender: {
           name: "CPDoc - Museu Histórico FMUSP",
-          email: "clebison.s@fm.usp.br" // Remetente verificado no Brevo
+          email: "propostacpdoc@gmail.com" // E-mail verificado no Brevo
         },
         to: [
           {
-            email: "museu.historico@fm.usp.br",
+            email: "cpdoc.museufm@usp.br", // Destinatário institucional correto
             name: "CPDoc / Atendimento ao Investigador"
           }
         ],
