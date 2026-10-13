@@ -1,9 +1,7 @@
 import crypto from 'crypto';
 
-// Armazenamento temporário dos códigos na memória da instância serverless
 global.otpStore = global.otpStore || new Map();
 
-// Oculta parte do e-mail para exibição segura na tela do navegador (LGPD)
 function mascararEmail(email) {
   if (!email || !email.includes('@')) return 'e-mail cadastrado';
   const [user, domain] = email.split('@');
@@ -14,7 +12,6 @@ function mascararEmail(email) {
 }
 
 export default async function handler(req, res) {
-  // Cabeçalhos CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -39,16 +36,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    /* 
-      BASE DE DADOS DE PESQUISADORES CADASTRADOS:
-      Pode ligar esta secção ao Supabase, Postgres ou Google Sheets.
-      Abaixo está um registo simulado para validação:
-    */
     const basePesquisadores = [
       {
         cpf: "12345678900",
         nome: "Pesquisador Teste USP",
-        email: "clebison.s@fm.usp.br", // Utilize o seu e-mail para receber o teste
+        email: "clebison.s@fm.usp.br",
         telefone: "(11) 98765-4321",
         instituicao: "Faculdade de Medicina da USP",
         vinculo: "Pós-Graduando"
@@ -64,7 +56,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Geração do código OTP de 6 dígitos numéricos com validade de 10 minutos
     const codigoOTP = crypto.randomInt(100000, 999999).toString();
     const tempoExpiracao = Date.now() + 10 * 60 * 1000;
 
@@ -92,7 +83,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         sender: { 
           name: "CPDoc - Museu Histórico FMUSP", 
-          email: "clebison.s@fm.usp.br" // Remetente verificado no Brevo
+          email: "propostacpdoc@gmail.com" // E-mail verificado no Brevo
         },
         to: [
           { 
