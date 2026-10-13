@@ -1,10 +1,5 @@
-Aqui está o código completo e resiliente para o ficheiro api/send-email.js.
-
-Este código aceita diferentes convenções de nomenclatura de variáveis (camelCase, snake_case ou campos aninhados), trata conversões em formato JSON e regista nos registos da Vercel as chaves exatas recebidas caso algum dado essencial falte.
-
-JavaScript
 export default async function handler(req, res) {
-  // 1. Cabeçalhos CORS para permitir requisições seguras do front-end
+  // 1. Cabeçalhos CORS para permitir requisições do front-end
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -22,20 +17,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Normalização do corpo da requisição (trata texto bruto ou JSON)
+    // Normalização do corpo da requisição (trata objeto direto ou string JSON)
     let body = req.body;
     if (typeof body === 'string') {
       try {
         body = JSON.parse(body);
       } catch (e) {
-        // Mantém como objeto caso já esteja tratado
+        // Mantém como está se a conversão falhar
       }
     }
 
-    // Suporta dados enviados diretamente ou encapsulados em "dados", "formData" ou "form"
+    // Suporte a dados diretos ou encapsulados em "dados", "formData" ou "form"
     const data = body?.dados || body?.formData || body?.form || body || {};
 
-    // Mapeamento automático de sinónimos frequentes de nomes de campo
+    // Extração flexível dos campos para evitar incompatibilidades de nomes
     const nome = (
       data.nome ||
       data.nomeCompleto ||
@@ -77,9 +72,9 @@ export default async function handler(req, res) {
     const validacaoOtpTimestamp = data.validacaoOtpTimestamp || data.validacao_otp_timestamp || '';
     const pdfBase64 = data.pdfBase64 || data.pdf_base64 || data.pdf || data.arquivo_pdf || '';
 
-    // Validação de campos essenciais com diagnóstico detalhado
+    // Validação dos dados essenciais
     if (!nome || !email || !cpf) {
-      console.error('Campos obrigatórios em falta. Chaves detetadas no payload:', Object.keys(data));
+      console.error('Campos obrigatórios em falta. Chaves detetadas no envio:', Object.keys(data));
       return res.status(400).json({
         error: 'Dados obrigatórios em falta (nome, e-mail ou CPF).',
         chavesRecebidas: Object.keys(data)
@@ -88,13 +83,13 @@ export default async function handler(req, res) {
 
     const brevoApiKey = process.env.BREVO_API_KEY;
     if (!brevoApiKey) {
-      console.error('Variável de ambiente BREVO_API_KEY não configurada na Vercel.');
+      console.error('Variável BREVO_API_KEY não configurada na Vercel.');
       return res.status(500).json({ error: 'Configuração do serviço de e-mail pendente no servidor.' });
     }
 
     const dataEnvioFormatada = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-    // Preparação do anexo PDF em Base64
+    // Preparação do anexo PDF em Base64 (se fornecido)
     const attachments = [];
     if (pdfBase64) {
       const base64Limpo = String(pdfBase64).replace(/^data:application\/pdf;base64,/, '').trim();
@@ -106,7 +101,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // Estruturação do e-mail em HTML
+    // Montagem do corpo de e-mail estruturado
     const htmlEmail = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; max-width: 680px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <div style="border-bottom: 2px solid #0b3b60; padding-bottom: 12px; margin-bottom: 20px;">
@@ -147,12 +142,12 @@ export default async function handler(req, res) {
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
         <p style="font-size: 13px; color: #6b7280;">
-          O termo formal de compromisso e as declarações de conformidade encontram-se no documento PDF gerado e anexado a esta mensagem. O prazo regular para análise técnica e resposta do CPDoc é de até 10 dias úteis.
+          O termo formal de compromisso assinado encontra-se no documento PDF anexo a esta mensagem. O prazo regular para análise técnica e resposta do CPDoc é de até 10 dias úteis.
         </p>
       </div>
     `;
 
-    // Disparo através da API do Brevo
+    // Disparo através da API do Brevo com o remetente verificado
     const respostaBrevo = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -163,7 +158,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         sender: {
           name: "CPDoc - Museu Histórico FMUSP",
-          email: "museu.historico@fm.usp.br"
+          email: "clebison.s@fm.usp.br" // Remetente verificado no Brevo
         },
         to: [
           {
@@ -189,7 +184,7 @@ export default async function handler(req, res) {
 
     if (!respostaBrevo.ok) {
       const detalheErro = await respostaBrevo.text();
-      console.error('Erro retornado pela API do Brevo:', detalheErro);
+      console.error('Erro na resposta do Brevo:', detalheErro);
       return res.status(respostaBrevo.status).json({
         error: 'Falha no envio do e-mail através do Brevo.',
         detalhes: detalheErro
