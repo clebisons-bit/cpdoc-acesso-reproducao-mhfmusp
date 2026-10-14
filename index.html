@@ -580,10 +580,10 @@
             </button>
           </div>
           <div id="textoCreditoPadrao" class="p-3 bg-white border border-gray-300 rounded-lg text-xs font-mono text-gray-800 select-all leading-relaxed">
-            Acervo do Museu Histórico "Prof. Carlos da Silva Lacaz" da Faculdade de Medicina da Universidade de São Paulo — MHFMUSP. Nº de referência/tombo: [código do item]. [Autoria, quando identificada]. [Título ou descrição do item], [datação].
+            Acervo do Museu Histórico "Prof. Carlos da Silva Lacaz" da Faculdade de Medicina da Universidade de São Paulo — MHFM-USP. Nº de tombamento/inventário: [código do item]. [Autoria, quando identificada]. [Título ou descrição do item], [datação].
           </div>
           <p class="text-[11px] text-gray-600">
-            A omissão do crédito ou apresentação inexata sujeita o solicitante às sanções do item 12.
+            Conforme a norma ABNT NBR 6023/2018 e o item 8 do Termo. A omissão do crédito ou apresentação inexata sujeita o solicitante às sanções do item 12.
           </p>
 
           <div class="pt-2">
@@ -695,12 +695,13 @@
         <!-- DECLARAÇÕES DE ACEITE -->
         <div class="space-y-3 bg-white p-4 border-2 border-[#009CA6] rounded-xl">
           <p class="text-xs font-bold text-[#006747] uppercase">Declarações Finais de Aceite (Assinale todas para habilitar o envio):</p>
-<!-- NOVO -->
-<label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
-  <input type="checkbox" id="marcarTodosAceites" class="mt-0.5 rounded text-[#006747]" onchange="alternarTodosAceites(this.checked)">
-  <span class="font-bold">Marcar todos</span>
-</label>
-<!-- FIM DO NOVO -->
+
+          <!-- MARCAR TODOS -->
+          <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
+            <input type="checkbox" id="marcarTodosAceites" class="mt-0.5 rounded text-[#006747]">
+            <span class="font-bold">Marcar todos</span>
+          </label>
+
           <label class="flex items-start gap-2.5 text-xs text-gray-800 cursor-pointer">
             <input type="checkbox" class="check-aceite mt-0.5 rounded text-[#006747]" onchange="verificarAceites()">
             <span>Declaro que as informações que prestei neste formulário são verdadeiras e que a finalidade de uso declarada corresponde ao real propósito da minha consulta e/ou reprodução (item 1 do Termo).</span>
@@ -860,7 +861,7 @@
     $('accessForm').addEventListener('submit', e => e.preventDefault());
 
     /* ---------- Persistência Automática ---------- */
-    const ehCampoDeAceite = el => el.id === 'cpfRetorno' || el.id === 'codigoRetorno' || el.classList.contains('check-aceite') || el.id === 'checkDireitosTerceiros' || el.id === 'checkCienciaCusto';
+    const ehCampoDeAceite = el => el.id === 'cpfRetorno' || el.id === 'codigoRetorno' || el.id === 'marcarTodosAceites' || el.classList.contains('check-aceite') || el.id === 'checkDireitosTerceiros' || el.id === 'checkCienciaCusto';
 
     function salvarRascunho() {
       try {
@@ -1256,6 +1257,10 @@
       const todosAssinados = checks.every(c => c.checked) && $('checkDireitosTerceiros').checked;
       const temUsoPretendido = Array.from(document.querySelectorAll('input[name="usoPretendido"]:checked')).length > 0;
 
+      // Mantém o "Marcar todos" sincronizado com as caixas individuais
+      const mestre = $('marcarTodosAceites');
+      if (mestre) mestre.checked = checks.length > 0 && checks.every(c => c.checked);
+
       const ok = todosAssinados && temUsoPretendido;
       const btn = $('btnSubmit');
       btn.disabled = !ok;
@@ -1264,6 +1269,13 @@
       btn.classList.toggle('bg-[#006747]', ok);
       btn.classList.toggle('hover:bg-[#005037]', ok);
     }
+
+    // "Marcar todos": marca/desmarca as declarações finais de aceite
+    $('marcarTodosAceites').addEventListener('change', function () {
+      const marcado = this.checked;
+      document.querySelectorAll('.check-aceite').forEach(c => { c.checked = marcado; });
+      verificarAceites();
+    });
 
     document.querySelectorAll('input[name="usoPretendido"], #checkDireitosTerceiros').forEach(el => {
       el.addEventListener('change', verificarAceites);
@@ -1808,7 +1820,7 @@
     async function finalizarAssinatura() {
       if (enviando) return;
       enviando = true;
-      const btn = $('btnSubmit'), box =$('submitError'), rotuloOriginal = btn.innerHTML;
+      const btn = $('btnSubmit'), box = $('submitError'), rotuloOriginal = btn.innerHTML;
       box.classList.add('hidden'); btn.disabled = true;
 
       try {
@@ -1846,7 +1858,7 @@
         height: 80
       });
 
-      $('accessForm').classList.add('hidden');$('successPanel').classList.remove('hidden');
+      $('accessForm').classList.add('hidden'); $('successPanel').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       baixarPDFNovamente();
     }
